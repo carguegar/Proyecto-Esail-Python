@@ -14,7 +14,7 @@ CREATE TABLE CLIENTE (
     DNI VARCHAR(20) NOT NULL UNIQUE,
     numero_tarjeta VARCHAR(20),
     numero_tlfn VARCHAR(15),
-    email VARCHAR(100),
+    email VARCHAR(100)  UNIQUE,
     fecha_nacimiento DATE
 );
 
