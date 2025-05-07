@@ -127,13 +127,7 @@ def gestionar_cesta_compra(cesta_compra,cliente):
 
 def borrar_tikets(cliente):
     '''
-    @brief: Borra los tickets de un cliente de la base de datos.
-    @pre: Se requiere una conexión a la base de datos y un cliente válido.
-    @post: Borra los tickets del cliente de la base de datos.
-    @param conexion: La conexión a la base de datos.
-    @param cliente: El cliente cuyos tickets se van a borrar.
-    @return: None
-    
+    @brief: 
     '''
 
     query = f"SELECT * FROM GENERA_TICKET WHERE id_cliente = {cliente.id_cliente}"
@@ -147,93 +141,85 @@ def borrar_tikets(cliente):
                 fecha=ticket['fecha'],
                 cantidad=ticket['cantidad']
             )
-            borrar_ticket_bd(ticket)   
+            borrar_ticket_bd(ticket)  
 
 def borrar_cliente(cliente):
     '''
-    @brief: Borra un cliente de la base de datos.
-    @pre: Se requiere una conexión a la base de datos y un cliente válido.
-    @post: Borra el cliente de la base de datos.
-    @param conexion: La conexión a la base de datos.
-    @param cliente: El cliente que se va a borrar.
-    @return: None
+    @brief: 
     
     '''
+    borrar_tikets(cliente)
+    borrar_cliente_bd(cliente)
+            
+def controlador_borrar_cliente(cliente):
+    '''
+    @brief: 
     
-    bucle = True
-    while bucle:
-        print("¿Está seguro de que desea borrar su cuenta? (S/N)")
-        respuesta = input()
-        if respuesta.lower() == "s":
-            borrar_tikets(cliente)
-            borrar_cliente_bd(cliente)
-            bucle = False     
-        elif respuesta.lower() == "n":
-            bucle = False
-        else:
-            print("Respuesta no válida. Intente de nuevo.")
-     
+    '''
+    print("¿Está seguro de que desea borrar su cuenta? (S/N)")
+    respuesta = input()
+    if respuesta.lower() == "s":
+        borrar_cliente(cliente)
+        print("Cliente borrado correctamente.")
+    else:
+        print("Operación cancelada.")   
 ##########################################
 ### FUNCIONES DE MODIFICACIÓN CLIENTE ####
 ##########################################
 
 def modificar_numero_tarjeta_cliente(cliente):
     '''
-    @brief: Modifica el número de tarjeta de un cliente en la base de datos.
-    @pre: Se requiere una conexión a la base de datos y un cliente válido.
-    @post: Modifica el número de tarjeta del cliente en la base de datos.
-    @param conexion: La conexión a la base de datos.
-    @param cliente: El cliente cuyo número de tarjeta se va a modificar.
-    @return: None
+    @brief: 
     
     '''
-
-    nuevo_numero_tarjeta = input("Ingrese su nuevo número de tarjeta(presione enter para borrarlo):\n")
-    if nuevo_numero_tarjeta == "":
-        nuevo_numero_tarjeta = None
-    cliente.numero_tarjeta = nuevo_numero_tarjeta
-    query = f"UPDATE CLIENTE SET numero_tarjeta = '{nuevo_numero_tarjeta}' WHERE id_cliente = {cliente.id_cliente}"
+    query = f"UPDATE CLIENTE SET numero_tarjeta = '{cliente.numero_tarjeta}' WHERE id_cliente = {cliente.id_cliente}"
     conexion.ejecutar_query(query)
+
+def controlador_modificar_numero_tarjeta_cliente(cliente):
+    '''
+    @brief: 
+    '''
+    print("Introduce el nuevo número de tarjeta:")
+    cliente.numero_tarjeta = input()
+    modificar_numero_tarjeta_cliente(cliente)
     print("Número de tarjeta modificado correctamente.")
+    
 
 def modificar_numero_telefono_cliente(cliente):
     '''
-    @brief: Borra los tickets de un cliente de la base de datos.
-    @pre: Se requiere una conexión a la base de datos y un cliente válido.
-    @post: Borra los tickets del cliente de la base de datos.
-    @param conexion: La conexión a la base de datos.
-    @param cliente: El cliente cuyos tickets se van a borrar.
-    @return: None
-    
+    @brief: 
     '''
-    
-    nuevo_numero_telefono = input("Ingrese su nuevo número de teléfono(presione enter para borrarlo):\n")
-    if nuevo_numero_telefono == "":
-        nuevo_numero_telefono = None
-    cliente.numero_tlf = nuevo_numero_telefono
-    query = f"UPDATE CLIENTE SET numero_tlfn = '{nuevo_numero_telefono}' WHERE id_cliente = {cliente.id_cliente}"
+    query = f"UPDATE CLIENTE SET numero_tlfn = '{cliente.numero_tlf}' WHERE id_cliente = {cliente.id_cliente}"
     conexion.ejecutar_query(query)
+
+def controlador_modificar_numero_telefono_cliente(cliente):
+    '''
+    @brief: 
+    '''
+    print("Introduce el nuevo número de teléfono:")
+    cliente.numero_tlf = input()
+    modificar_numero_telefono_cliente(cliente)
     print("Número de teléfono modificado correctamente.")
 
 def modificar_contraseña_cliente(cliente):
     '''
-    @brief: Modifica la contraseña de un cliente en la base de datos.
-    @pre: Se requiere una conexión a la base de datos y un cliente válido.
-    @post: Modifica la contraseña del cliente en la base de datos.
-    @param conexion: La conexión a la base de datos.
-    @param cliente: El cliente cuya contraseña se va a modificar.
-    @return: None
-    
+    @brief: 
     '''
-
-    nueva_contraseña = input("Ingrese su nueva contraseña:\n")
-    if nueva_contraseña == "":
-        print("La contraseña no puede estar vacía.")
+    if cliente.contraseña == "":
+        return
     else:
-        cliente.contraseña = nueva_contraseña
-        query = f"UPDATE CLIENTE SET contraseña = '{nueva_contraseña}' WHERE id_cliente = {cliente.id_cliente}"
+        query = f"UPDATE CLIENTE SET contraseña = '{cliente.contraseña}' WHERE id_cliente = {cliente.id_cliente}"
         conexion.ejecutar_query(query)
-        print("Contraseña modificada correctamente.")
+
+def controlador_modificar_contraseña_cliente(cliente):
+    '''
+    @brief: 
+    '''
+    print("Introduce la nueva contraseña:")
+    cliente.contraseña = input()
+    modificar_contraseña_cliente(cliente)
+    print("Contraseña modificada correctamente.")
+    
 
 def comprobar_login(correo,contraseña):
     '''
@@ -392,6 +378,35 @@ def registro():
 ####################
 ### Cesta_Compra ###
 ####################
+
+def obtener_productos_paginados(pagina):
+    """
+    Obtiene productos de la base de datos según la página solicitada y los convierte en objetos Producto.
+
+    @param pagina (int): Número de la página (comenzando desde 1).
+
+    @return list: Lista de objetos Producto de la página solicitada.
+    """
+    productos_por_pagina = 7
+    offset = (pagina - 1) * productos_por_pagina  # Calcular el desplazamiento
+    query = f"SELECT * FROM PRODUCTO LIMIT {productos_por_pagina} OFFSET {offset}"
+    resultados = conexion.obtener_datos(query)
+
+    # Convertir los resultados en objetos Producto
+    productos = []
+    if resultados:
+        for producto in resultados:
+            producto_objeto = Producto(
+                id_producto=producto['id_producto'],
+                nombre_producto=producto['nombre_producto'],
+                descripcion=producto['descripcion'],
+                precio=producto['precio'],
+                fabricante=producto['fabricante'],
+                tipo=producto['tipo']
+            )
+            productos.append(producto_objeto)
+    return productos
+
 def mostrar_cesta_compra(cesta_compra):
     """
     @brief: Muestra la cesta de compra del cliente.
@@ -441,22 +456,18 @@ def imprimir_productos():
     else:
         print("No se encontraron productos.")
 
-def ver_tickets(cliente):
-    '''
-    @brief: Muestra los tickets de un cliente.
-    @pre: Se requiere una conexión a la base de datos y un cliente válido.
-    @post: Muestra los tickets del cliente.
-    @param conexion: La conexión a la base de datos.
-    @param cliente: El cliente cuyos tickets se van a mostrar.
-    @return: None
-    
-    '''
-
-    query = f"""SELECT 
-    PRODUCTO.nombre_producto,
-    PRODUCTO.precio,
-    GENERA_TICKET.cantidad,
-    GENERA_TICKET.fecha
+def obtener_tickets_cliente(cliente):
+    """
+    Obtiene los tickets de un cliente desde la base de datos.
+    @param cliente: El cliente cuyos tickets se van a obtener.
+    @return: Una lista de tickets o None si no se encuentran.
+    """
+    query = f"""
+    SELECT 
+        PRODUCTO.nombre_producto,
+        PRODUCTO.precio,
+        GENERA_TICKET.cantidad,
+        GENERA_TICKET.fecha
     FROM 
         GENERA_TICKET
     JOIN 
@@ -465,8 +476,17 @@ def ver_tickets(cliente):
         PRODUCTO ON GENERA_TICKET.id_producto = PRODUCTO.id_producto
     WHERE 
         CLIENTE.id_cliente = {cliente.id_cliente};
-        """
+    """
     resultados = conexion.obtener_datos(query)
+    return resultados
+
+
+def mostrar_tickets_cliente(cliente):
+    """
+    Muestra los tickets de un cliente en la interfaz.
+    @param cliente: El cliente cuyos tickets se van a mostrar.
+    """
+    resultados = obtener_tickets_cliente(cliente)
     if resultados:
         print("Tickets del cliente:")
         for ticket in resultados:
@@ -519,13 +539,23 @@ def añadir_producto_cesta(cesta_compra):
             no_existe_producto == True
         else:
             no_existe_producto = False
-            cesta_compra[0].append(producto)
             while cantidad.isdigit() == False or int(cantidad) <= 0:
                 if cantidad.isdigit() == False or int(cantidad) <= 0:
                     print("La cantidad debe ser un número entero positivo.")
                 cantidad = input("Ingrese la cantidad que desea comprar:\n")
-                cesta_compra[1].append(int(cantidad))
+                insertar_producto_cesta(cesta_compra, producto, cantidad)
     return cesta_compra
+
+def insertar_producto_cesta(cesta_compra, producto, cantidad):
+    """
+    @brief: Inserta un producto en la cesta de compra del cliente.
+    @param cesta_compra(E/S): La cesta de compra del cliente.
+    @param producto(E): El producto que se va a insertar en la cesta de compra.
+    @param cantidad(E): La cantidad del producto que se va a insertar en la cesta de compra.
+    @post: Inserta el producto en la cesta de compra del cliente con una cantidad asignada.
+    """
+    cesta_compra[0].append(producto)
+    cesta_compra[1].append(cantidad)
 
 
 def comprar_productos_cesta(cesta_compra, cliente):
@@ -541,20 +571,24 @@ def comprar_productos_cesta(cesta_compra, cliente):
         print("No hay productos en la cesta.")
         error_cesta_vacia = True
     else:
-        fecha = datetime.now()
-        fecha = fecha.strftime("%Y-%m-%d")
-        for i in range(len(cesta_compra[0])):
-            ticket = Ticket(
-                id_ticket=None,
-                id_cliente=cliente.id_cliente,
-                id_producto=cesta_compra[0][i].id_producto,
-                fecha=fecha,
-                cantidad=cesta_compra[1][i]
-            )
-            insertar_ticket_bd(ticket)
+        crear_ticket(cesta_compra, cliente)
         print("Productos comprados correctamente.")
         cesta_compra[0].clear()
         cesta_compra[1].clear()
+
+def crear_ticket(cesta_compra, cliente):
+    fecha = datetime.now()
+    fecha = fecha.strftime("%Y-%m-%d")
+    for i in range(len(cesta_compra[0])):
+        ticket = Ticket(
+            id_ticket=None,
+            id_cliente=cliente.id_cliente,
+            id_producto=cesta_compra[0][i].id_producto,
+            fecha=fecha,
+            cantidad=cesta_compra[1][i]
+         )
+        insertar_ticket_bd(ticket)
+
 
 def modificar_cantidad_producto(cesta_compra, posicion_producto, cantidad):
     """
@@ -616,4 +650,3 @@ def insertar_ticket_bd(ticket):
 def borrar_ticket_bd(ticket):
     query = f"DELETE FROM GENERA_TICKET WHERE id_ticket = {ticket.id_ticket}"
     conexion.ejecutar_query(query)
-main()
