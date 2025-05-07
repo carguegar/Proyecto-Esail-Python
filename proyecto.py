@@ -3,12 +3,18 @@ from SQL.base_datos import *
 from SQL.base_datos import conexion
 from datetime import datetime
 
+
 def main():
+    
     cliente = None
-    cliente = menu_principal()
-    menu_cliente(cliente)
-#FRONTEND
-# MENÚS
+    sesion = True  
+    while sesion:
+        cliente = menu_principal()
+        if cliente != False:
+            menu_cliente(cliente)
+        else:
+            sesion = False
+
 def imprimir_opciones_menu_principal():
     print("Bienvenido a CristoMarket.")
     print("1. Iniciar sesión")
@@ -20,25 +26,49 @@ def imprimir_opciones_menu_principal():
 def imprimir_opciones_menu_cliente():
     print("Bienvenido a CristoMarket.")
     print("1. Añadir productos a la cesta")
-    print("2. Comprar productos de la cesta")
+    print("2. Ver cesta de la compra")
     print("3. Ver tickets")
-    print("4. Salir")
+    print("4. Modificar datos de cliente")
+    print("5. Borrar cliente")
+    print("6. Salir")
+    opcion = input("Seleccione una opción: ")
+    return opcion
+
+def imprimir_opciones_gestion_cesta():
+    print("Gestión de la cesta de la compra:")
+    print("1. Eliminar un producto de la cesta")
+    print("2. Cambiar cantidad de un producto en la cesta")
+    print("3. Comprar productos de la cesta")
+    print("4. Volver al menú principal")
+    opcion = input("Seleccione una opción: ")
+    return opcion
+
+def imprimir_menu_modificar_cliente(): 
+    print("Modificar datos de cliente:")
+    print("1. Modificar número de tarjeta")
+    print("2. Modificar número de teléfono")
+    print("3. Cambiar contraseña")
+    print("4. Volver al menú principal")
     opcion = input("Seleccione una opción: ")
     return opcion
 
 def menu_principal():
-     cliente = None
-     error = True
-     while error:
+    cliente = None
+    bucle = True
+    while bucle:
         opcion =imprimir_opciones_menu_principal()
         if opcion == "1":
-            error = False
+            bucle = False
             cliente = login()
         elif opcion == "2":
             cliente = registro()
+        elif opcion == "3":
+            print("Saliendo del programa.")
+            cliente = False
+            bucle = False
         else:
             print("Opción no válida. Intente de nuevo.")
-        return cliente
+    return cliente
 
 def menu_cliente(cliente):
     salir = False
@@ -46,21 +76,175 @@ def menu_cliente(cliente):
     while salir == False:
         opcion = imprimir_opciones_menu_cliente()
         if opcion == "1":
-            error = False
             añadir_producto_cesta(cesta_compra)
         elif opcion == "2":
-            error = False
-            comprar_productos_cesta(cesta_compra, cliente)
+            gestionar_cesta_compra(cesta_compra,cliente)
         elif opcion == "3":
-            error = False
             ver_tickets(cliente)
         elif opcion == "4":
+            menu_modificar_cliente(cliente)
+        elif opcion == "5":
+            borrar_cliente(cliente)
+            salir = True
+        elif opcion == "6":
             print("Saliendo del programa.")
             salir = True
         else:
             print("Opción no válida. Intente de nuevo.")
 
+def menu_modificar_cliente(cliente):
+    salir = False
+    while salir == False:
+        opcion = imprimir_menu_modificar_cliente()
+        if opcion == "1":
+            modificar_numero_tarjeta_cliente(cliente)
+        elif opcion == "2":
+            modificar_numero_telefono_cliente(cliente)
+        elif opcion == "3":
+            modificar_contraseña_cliente(cliente)
+        elif opcion == "4":
+            salir = True
+        else:
+            print("Opción no válida. Intente de nuevo.")
+
+def gestionar_cesta_compra(cesta_compra,cliente):
+    bucle = True
+    while bucle:
+        mostrar_cesta_compra(cesta_compra)
+        opcion = imprimir_opciones_gestion_cesta()
+        if opcion == "1":
+            eliminar_producto_cesta(cesta_compra)
+        elif opcion == "2":
+            controlador_modificar_cantidad_producto(cesta_compra)
+        elif opcion == "3":
+            comprar_productos_cesta(cesta_compra, cliente)
+        elif opcion == "4":
+            bucle = False
+
+#############################
+### FUNCIONES DE BORRADO ####
+#############################
+
+def borrar_tikets(cliente):
+    '''
+    @brief: Borra los tickets de un cliente de la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Borra los tickets del cliente de la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @param cliente: El cliente cuyos tickets se van a borrar.
+    @return: None
+    
+    '''
+
+    query = f"SELECT * FROM GENERA_TICKET WHERE id_cliente = {cliente.id_cliente}"
+    resultados = conexion.obtener_datos(query)
+    if resultados:
+        for ticket in resultados:
+            ticket = Ticket(
+                id_ticket=ticket['id_ticket'],
+                id_cliente=ticket['id_cliente'],
+                id_producto=ticket['id_producto'],
+                fecha=ticket['fecha'],
+                cantidad=ticket['cantidad']
+            )
+            borrar_ticket_bd(ticket)   
+
+def borrar_cliente(cliente):
+    '''
+    @brief: Borra un cliente de la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Borra el cliente de la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @param cliente: El cliente que se va a borrar.
+    @return: None
+    
+    '''
+    
+    bucle = True
+    while bucle:
+        print("¿Está seguro de que desea borrar su cuenta? (S/N)")
+        respuesta = input()
+        if respuesta.lower() == "s":
+            borrar_tikets(cliente)
+            borrar_cliente_bd(cliente)
+            bucle = False     
+        elif respuesta.lower() == "n":
+            bucle = False
+        else:
+            print("Respuesta no válida. Intente de nuevo.")
+     
+##########################################
+### FUNCIONES DE MODIFICACIÓN CLIENTE ####
+##########################################
+
+def modificar_numero_tarjeta_cliente(cliente):
+    '''
+    @brief: Modifica el número de tarjeta de un cliente en la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Modifica el número de tarjeta del cliente en la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @param cliente: El cliente cuyo número de tarjeta se va a modificar.
+    @return: None
+    
+    '''
+
+    nuevo_numero_tarjeta = input("Ingrese su nuevo número de tarjeta(presione enter para borrarlo):\n")
+    if nuevo_numero_tarjeta == "":
+        nuevo_numero_tarjeta = None
+    cliente.numero_tarjeta = nuevo_numero_tarjeta
+    query = f"UPDATE CLIENTE SET numero_tarjeta = '{nuevo_numero_tarjeta}' WHERE id_cliente = {cliente.id_cliente}"
+    conexion.ejecutar_query(query)
+    print("Número de tarjeta modificado correctamente.")
+
+def modificar_numero_telefono_cliente(cliente):
+    '''
+    @brief: Borra los tickets de un cliente de la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Borra los tickets del cliente de la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @param cliente: El cliente cuyos tickets se van a borrar.
+    @return: None
+    
+    '''
+    
+    nuevo_numero_telefono = input("Ingrese su nuevo número de teléfono(presione enter para borrarlo):\n")
+    if nuevo_numero_telefono == "":
+        nuevo_numero_telefono = None
+    cliente.numero_tlf = nuevo_numero_telefono
+    query = f"UPDATE CLIENTE SET numero_tlfn = '{nuevo_numero_telefono}' WHERE id_cliente = {cliente.id_cliente}"
+    conexion.ejecutar_query(query)
+    print("Número de teléfono modificado correctamente.")
+
+def modificar_contraseña_cliente(cliente):
+    '''
+    @brief: Modifica la contraseña de un cliente en la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Modifica la contraseña del cliente en la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @param cliente: El cliente cuya contraseña se va a modificar.
+    @return: None
+    
+    '''
+
+    nueva_contraseña = input("Ingrese su nueva contraseña:\n")
+    if nueva_contraseña == "":
+        print("La contraseña no puede estar vacía.")
+    else:
+        cliente.contraseña = nueva_contraseña
+        query = f"UPDATE CLIENTE SET contraseña = '{nueva_contraseña}' WHERE id_cliente = {cliente.id_cliente}"
+        conexion.ejecutar_query(query)
+        print("Contraseña modificada correctamente.")
+
 def login():
+    '''
+    @brief: Inicia sesión de un cliente en la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Inicia sesión del cliente en la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @return: El cliente que ha iniciado sesión o None si no se encuentra.
+    
+    '''
+
     login = False
     while login == False:
         correo = input("Ingrese su correo electrónico:\n ")
@@ -85,10 +269,20 @@ def login():
         else:
             print("Correo electrónico o contraseña incorrectos.")
     return cliente
-            
-def registro(lista_clientes):
+
+def registro():
+    '''
+    @brief: Registra un nuevo cliente en la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Registra el cliente en la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @return: El cliente registrado.
+    
+    '''
+
     bucle_preguntas = True
     print("Registro de nuevo cliente. Si desea dejar alguna opción en blanco, simplemente presione Enter.")
+    ###### Nombre ######
     while bucle_preguntas:
         nombre = input("Ingrese su nombre:\n")
         if nombre != "":
@@ -96,25 +290,38 @@ def registro(lista_clientes):
         else:
             print("El nombre no puede estar vacío.")
     bucle_preguntas = True
+    ###### Apellido1 ######
     while bucle_preguntas:
         apellido1 = input("Ingrese su primer apellido:\n")
         if apellido1 != "":
             bucle_preguntas = False
         else:
             print("El primer apellido no puede estar vacío.")
+    ##### Apellido2 ######
     apellido2 = input("Ingrese su segundo apellido:\n")
     if apellido2 == "":
         apellido2 = None
+    ##### DNI ######
     bucle_preguntas = True 
     while bucle_preguntas:
         dni = input("Ingrese su DNI:\n")
         if dni != "":
-            bucle_preguntas = False
+            if len(dni) == 9 and dni[:-1].isdigit() and dni[-1].isalpha():
+                query = f"SELECT * FROM CLIENTE WHERE DNI = '{dni}'"
+                resultados = conexion.obtener_datos(query)
+                if resultados:
+                    print("El DNI ya está registrado.")
+                else:
+                    bucle_preguntas = False
+            else:
+                print("El DNI no es válido. Debe tener 8 dígitos y una letra al final.")
         else:
-            print("El DNI no puede estar vacío.")  
+            print("El DNI no puede estar vacío.")
+    ##### Número de tarjeta ######  
     numero_tarjeta = input("Ingrese su número de tarjeta:\n")
     if numero_tarjeta == "":
         numero_tarjeta = None
+    ##### Número de teléfono ######
     bucle_preguntas = True
     while bucle_preguntas:
         numero_tlf = input("Ingrese su número de teléfono:\n")
@@ -124,32 +331,110 @@ def registro(lista_clientes):
             print("El número de teléfono no es válido.")
         else:
             bucle_preguntas = False
+    ##### Correo electrónico ######
     bucle_preguntas = True
     while bucle_preguntas:
         correo = input("Ingrese su correo electrónico:\n")
         if correo != "":
-            bucle_preguntas = False
+            query = f"SELECT * FROM CLIENTE WHERE email = '{correo}'"
+            resultados = conexion.obtener_datos(query)
+            if resultados:
+                print("El correo electrónico ya está registrado.")
+            else:
+               bucle_preguntas = False
         else:
             print("El correo electrónico no puede estar vacío.")
-    fecha_nacimiento = input("Ingrese su fecha de nacimiento (YYYY-MM-DD):\n")
-    if fecha_nacimiento == "":
-        fecha_nacimiento = None
+    ##### Contraseña #####
+    bucle_preguntas = True 
+    while bucle_preguntas:
+        contraseña = input("Ingrese su contraseña:\n")
+        if contraseña != "":
+            if len(contraseña) >= 4:
+                bucle_preguntas = False
+            else:
+                print("La contraseña debe tener al menos 4 caracteres.")
+        else:
+            print("La contraseña no puede estar vacía.")
+    ####fecha de nacimiento#####
+    bucle_preguntas = True
+    while bucle_preguntas:
+        fecha_nacimiento = input("Ingrese su fecha de nacimiento (YYYY-MM-DD):\n")
+        if fecha_nacimiento == "":
+            print("La fecha de nacimiento no puede estar vacía.")
+        else:
+            try:
+                fecha_nacimiento = datetime.strptime(fecha_nacimiento, "%Y-%m-%d").date()
+                bucle_preguntas = False
+            except ValueError:
+                print("La fecha de nacimiento no es válida. Debe estar en el formato YYYY-MM-DD.")
     id_cliente = None
-    nuevo_cliente = Cliente(id_cliente, nombre, apellido1, apellido2, dni, numero_tarjeta, numero_tlf, correo, fecha_nacimiento)
+    nuevo_cliente = Cliente(id_cliente, nombre, apellido1, apellido2, dni, numero_tarjeta, numero_tlf, correo, fecha_nacimiento, contraseña)
     insertar_cliente_bd(nuevo_cliente)  # Llamar a la función para insertar en la base de datos
-#BACKEND
-##################
-#### TICKETS #####
-##################
+
 
 ####################
-#### PRODUCTOS #####
+### Cesta_Compra ###
 ####################
+def mostrar_cesta_compra(cesta_compra):
+    """
+    @brief: Muestra la cesta de compra del cliente.
+    @param cesta_compra(E): La cesta de compra del cliente.
+    @post: Imprime la cesta de compra del cliente.
+    """
+    if len(cesta_compra[0]) == 0:
+        print("La cesta de compra está vacía.")
+    else:
+        print("Cesta de compra:")
+        for i in range(len(cesta_compra[0])):
+            print(f"{i+1}.- Producto: {cesta_compra[0][i].nombre_producto}, Cantidad: {cesta_compra[1][i]}, Precio: {cesta_compra[0][i].precio}, Precio Total: {cesta_compra[0][i].precio * cesta_compra[1][i]}")
 
-###################
-#### CLIENTES #####
-###################
+def pedir_usuario_posicion_producto(cesta_compra):
+    """
+    @brief Pide al usuario la posición del producto en la cesta de compra y valida la entrada.
+    @param cesta_compra(E): La cesta de compra del cliente.
+    @post: Devuelve una posición válida de un producto en la cesta de compra.
+    @return posicion_producto: La posición del producto en la cesta de compra.
+    @pre: La posición del producto debe ser un número entero entre 1 y el tamaño de la cesta de compra.
+    """
+    
+    tamaño_cesta = len(cesta_compra[0])
+    posicion_producto = 0
+    while posicion_producto < 1 or posicion_producto > tamaño_cesta:
+        posicion_producto = int(input("Ingrese la posición del producto cuya cantidad desea modificar:\n"))
+        if posicion_producto < 1 or posicion_producto > tamaño_cesta:
+            print("Posición no válida. Intente de nuevo.")
+    return posicion_producto
+
+def imprimir_productos():
+    '''
+    @brief: Imprime los productos disponibles en la base de datos.
+    @pre: Se requiere una conexión a la base de datos.
+    @post: Imprime los productos disponibles en la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @return: None
+    
+    '''
+
+    query = "SELECT * FROM PRODUCTO"
+    resultados = conexion.obtener_datos(query)
+    if resultados:
+        print("Productos disponibles:")
+        for producto in resultados:
+            print(f"ID: {producto['id_producto']}, Nombre: {producto['nombre_producto']}, Precio: {producto['precio']}")
+    else:
+        print("No se encontraron productos.")
+
 def ver_tickets(cliente):
+    '''
+    @brief: Muestra los tickets de un cliente.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Muestra los tickets del cliente.
+    @param conexion: La conexión a la base de datos.
+    @param cliente: El cliente cuyos tickets se van a mostrar.
+    @return: None
+    
+    '''
+
     query = f"""SELECT 
     PRODUCTO.nombre_producto,
     PRODUCTO.precio,
@@ -173,17 +458,17 @@ def ver_tickets(cliente):
     else:
         print("No se encontraron tickets para este cliente.")
 
-def imprimir_productos():
-    query = "SELECT * FROM PRODUCTO"
-    resultados = conexion.obtener_datos(query)
-    if resultados:
-        print("Productos disponibles:")
-        for producto in resultados:
-            print(f"ID: {producto['id_producto']}, Nombre: {producto['nombre_producto']}, Precio: {producto['precio']}")
-    else:
-        print("No se encontraron productos.")
-
 def buscar_producto_por_id(id_producto):
+    '''
+    @brief: Busca un producto por su ID en la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un ID de producto válido.
+    @post: Busca el producto en la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @param id_producto: El ID del producto que se va a buscar.
+    @return: El producto encontrado o False si no se encuentra.
+    
+    '''
+
     query = f"SELECT * FROM PRODUCTO WHERE id_producto = {id_producto}"
     resultados = conexion.obtener_datos(query)
     if not resultados:
@@ -200,6 +485,11 @@ def buscar_producto_por_id(id_producto):
         return producto
 
 def añadir_producto_cesta(cesta_compra):
+    """
+    @brief: Añade un producto a la cesta de compra del cliente.
+    @param cesta_compra(E/S): La cesta de compra del cliente.
+    @post: Añade el producto a la cesta de compra del cliente con una cantidad asignada.
+    """
     no_existe_producto = True
     cantidad = "0"
     imprimir_productos()
@@ -222,6 +512,13 @@ def añadir_producto_cesta(cesta_compra):
 
 
 def comprar_productos_cesta(cesta_compra, cliente):
+    """
+    @brief: Realiza la compra de los productos en la cesta de compra, (realiza la creación de los tickets).
+    @param cesta_compra(E): La cesta de compra del cliente.
+    @param cliente(E): El cliente que realiza la compra.
+    @post: Los productos de la cesta de compra se compran y se insertan en la base de datos.
+    @post: Se crea un ticket por cada producto comprado.
+    """
     error_cesta_vacia = False
     if len(cesta_compra[0]) == 0:
         print("No hay productos en la cesta.")
@@ -242,133 +539,66 @@ def comprar_productos_cesta(cesta_compra, cliente):
         cesta_compra[0].clear()
         cesta_compra[1].clear()
 
-def insertar_cliente_bd(cliente):
-    conn = conexion.ConexionBasedeDatos()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            query = "INSERT INTO CLIENTE (nombre, apellido1, apellido2, DNI, numero_tarjeta, numero_tlfn, email, fecha_nacimiento, contraseña) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    
-            values = (
-                cliente.nombre,
-                cliente.apellido1,
-                cliente.apellido2,
-                cliente.DNI,
-                cliente.numero_tarjeta,
-                cliente.numero_tlf,
-                cliente.correo,
-                cliente.fecha_nacimiento,
-                cliente._Cliente__contraseña  # Acceso al atributo privado
-            )
+def modificar_cantidad_producto(cesta_compra, posicion_producto, cantidad):
+    """
+    @brief: Modifica la cantidad de un producto en la cesta de compra.
+    @param cesta_compra(E/S): La cesta de compra del cliente.
+    @param posicion_producto(E): La posición del producto en la cesta de compra.
+    @param cantidad(E): La nueva cantidad del producto.
+    @post: La cantidad del producto en la cesta de compra será igual a la cantidad.
+    """
+    posicion_producto = posicion_producto - 1
+    if int(cantidad) <= 0:
+        del cesta_compra[0][posicion_producto]
+        del cesta_compra[1][posicion_producto]
+    else:
+        cesta_compra[1][int(posicion_producto)] = int(cantidad)
 
-            cursor.execute(query, values)
-            conn.commit()
-            print("Cliente insertado correctamente.")
-        except Exception as e:
-            print(f"Error al insertar cliente: {e}")
-        finally:
-            cursor.close()
-            conn.close()
+def controlador_modificar_cantidad_producto(cesta_compra):
+    """
+    @brief: Controla la modificación de la cantidad de un producto en la cesta de compra.
+    @param cesta_compra(E/S): La cesta de compra del cliente.
+    @post: Modifica la cantidad del producto en la cesta de compra.
+    """
+    posicion_producto = pedir_usuario_posicion_producto(cesta_compra)
+    cantidad = input("Ingrese la nueva cantidad:\n")
+    modificar_cantidad_producto(cesta_compra,posicion_producto,cantidad)
+
+def eliminar_producto_cesta(cesta_compra):
+    """
+    @brief: Elimina un producto de la cesta de compra.
+    @param cesta_compra(E/S): La cesta de compra del cliente.
+    @post: Elimina el producto de la cesta de compra.
+    """
+    posicion_producto = pedir_usuario_posicion_producto(cesta_compra)
+    modificar_cantidad_producto(cesta_compra,posicion_producto,0)
+
+  
+####### BD ########
+
+def insertar_cliente_bd(cliente):
+    query = f"INSERT INTO CLIENTE (nombre, apellido1, apellido2, DNI, numero_tarjeta, numero_tlfn, email, fecha_nacimiento, contraseña) VALUES ( '{cliente.nombre}', '{cliente.apellido1}', '{cliente.apellido2}', '{cliente.DNI}', '{cliente.numero_tarjeta}', '{cliente.numero_tlf}', '{cliente.correo}', '{cliente.fecha_nacimiento}', '{cliente.contraseña}')"
+    conexion.ejecutar_query(query)
 
 def borrar_cliente_bd(cliente):
-    conn = conexion.ConexionBasedeDatos()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            query = "DELETE FROM CLIENTE WHERE id_cliente = %s"
-    
-            values = (cliente.id_cliente,)
-
-            cursor.execute(query, values)
-            conn.commit()
-            print("Cliente borrado correctamente.")
-        except Exception as e:
-            print(f"Error al borrar cliente: {e}")
-        finally:
-            cursor.close()
-            conn.close()
+    query = f"DELETE FROM CLIENTE WHERE id_cliente = {cliente.id_cliente}"
+    conexion.ejecutar_query(query)
 
 def insertar_producto_bd(producto):
-    conn = conexion.ConexionBasedeDatos()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            query = "INSERT INTO PRODUCTO (nombre_producto, descripcion, precio, fabricante, tipo) VALUES (%s, %s, %s, %s, %s)"
-    
-            values = (
-                producto.nombre_producto,
-                producto.descripcion,
-                producto.precio,
-                producto.fabricante,
-                producto.tipo
-            )
-
-            cursor.execute(query, values)
-            conn.commit()
-            print("Producto insertado correctamente.")
-        except Exception as e:
-            print(f"Error al insertar producto: {e}")
-        finally:
-            cursor.close()
-            conn.close()
+    query = f"INSERT INTO PRODUCTO (nombre_producto, descripcion, precio, fabricante, tipo) VALUES ('{producto.nombre_producto}', '{producto.descripcion}', {producto.precio}, '{producto.fabricante}', '{producto.tipo}')"
+    conexion.ejecutar_query(query)
 
 def borrar_producto_bd(producto):
-    conn = conexion.ConexionBasedeDatos()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            query = "DELETE FROM PRODUCTO WHERE id_producto = %s"
-    
-            values = (producto.id_producto,)
-
-            cursor.execute(query, values)
-            conn.commit()
-            print("Producto borrado correctamente.")
-        except Exception as e:
-            print(f"Error al borrar producto: {e}")
-        finally:
-            cursor.close()
-            conn.close()            
+    query = f"DELETE FROM PRODUCTO WHERE id_producto = {producto.id_producto}"
+    conexion.ejecutar_query(query)
 
 def insertar_ticket_bd(ticket):
-    conn = conexion.ConexionBasedeDatos()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            query = "INSERT INTO GENERA_TICKET (id_cliente, id_producto, fecha, cantidad) VALUES (%s, %s, %s, %s)"
-    
-            values = (
-                ticket.id_cliente,
-                ticket.id_producto,
-                ticket.fecha,
-                ticket.cantidad
-            )
-
-            cursor.execute(query, values)
-            conn.commit()
-            print("Ticket insertado correctamente.")
-        except Exception as e:
-            print(f"Error al insertar ticket: {e}")
-        finally:
-            cursor.close()
-            conn.close()
+    query = f"INSERT INTO GENERA_TICKET (id_cliente, id_producto, fecha, cantidad) VALUES ({ticket.id_cliente}, {ticket.id_producto}, '{ticket.fecha}', {ticket.cantidad})"
+    conexion.ejecutar_query(query)
 
 def borrar_ticket_bd(ticket):
-    conn = conexion.ConexionBasedeDatos()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            query = "DELETE FROM GENERA_TICKET WHERE id_ticket = %s"
-    
-            values = (ticket.id_ticket,)
+    query = f"DELETE FROM GENERA_TICKET WHERE id_ticket = {ticket.id_ticket}"
+    conexion.ejecutar_query(query)
 
-            cursor.execute(query, values)
-            conn.commit()
-            print("Ticket borrado correctamente.")
-        except Exception as e:
-            print(f"Error al borrar ticket: {e}")
-        finally:
-            cursor.close()
-            conn.close()
 
 main()

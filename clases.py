@@ -40,6 +40,9 @@ class Cliente():
     @property
     def id_cliente(self):
         return self.__id_cliente
+    @property
+    def contraseña(self):
+        return self.__contraseña
     @id_cliente.setter
     def id_cliente(self, id_cliente):
         self.__id_cliente = id_cliente
@@ -67,6 +70,9 @@ class Cliente():
     @fecha_nacimiento.setter
     def fecha_nacimiento(self, fecha_nacimiento):
         self.__fecha_nacimiento = fecha_nacimiento
+    @contraseña.setter
+    def contraseña(self, contraseña):
+        self.__contraseña = contraseña
     def comprobar_login(self, correo, contrasena):
         if self.correo == correo and self.__contraseña == contrasena:
             return True
