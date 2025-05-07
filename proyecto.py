@@ -235,24 +235,22 @@ def modificar_contraseña_cliente(cliente):
         conexion.ejecutar_query(query)
         print("Contraseña modificada correctamente.")
 
-def login():
+def comprobar_login(correo,contraseña):
     '''
-    @brief: Inicia sesión de un cliente en la base de datos.
+    @brief: Comprueba si el cliente existe en la base de datos.
     @pre: Se requiere una conexión a la base de datos y un cliente válido.
-    @post: Inicia sesión del cliente en la base de datos.
+    @post: Comprueba si el cliente existe en la base de datos.
     @param conexion: La conexión a la base de datos.
-    @return: El cliente que ha iniciado sesión o None si no se encuentra.
+    @param correo: El correo electrónico del cliente que se va a comprobar.
+    @param contraseña: La contraseña del cliente que se va a comprobar.
+    @return: El cliente que ha iniciado sesión o False si no se encuentra.
     
     '''
 
-    login = False
-    while login == False:
-        correo = input("Ingrese su correo electrónico:\n ")
-        contrasena = input("Ingrese su contraseña:\n ")
-        query = f"SELECT * FROM CLIENTE WHERE email = '{correo}' AND contraseña = '{contrasena}'"
-        resultados = conexion.obtener_datos(query)
-        if resultados:
-            cliente = Cliente(
+    query = f"SELECT * FROM CLIENTE WHERE email = '{correo}' AND contraseña = '{contraseña}'"
+    resultados = conexion.obtener_datos(query)
+    if resultados:
+        cliente = Cliente(
                 id_cliente=resultados[0]['id_cliente'],
                 nombre=resultados[0]['nombre'],
                 apellido1=resultados[0]['apellido1'],
@@ -264,10 +262,29 @@ def login():
                 fecha_nacimiento=resultados[0]['fecha_nacimiento'],
                 contraseña=resultados[0]['contraseña']
             )
+        return cliente
+    else:
+        return False
+def login():
+    '''
+    @brief: Inicia sesión de un cliente en la base de datos.
+    @pre: Se requiere una conexión a la base de datos y un cliente válido.
+    @post: Inicia sesión del cliente en la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @return: El cliente que ha iniciado sesión o None si no se encuentra.
+    
+    '''
+    cliente = None
+    login = False
+    while login == False:
+        correo = input("Ingrese su correo electrónico:\n ")
+        contrasena = input("Ingrese su contraseña:\n ")
+        cliente = comprobar_login(correo, contrasena)
+        if cliente == False:
+            print("Correo electrónico o contraseña incorrectos.")
+        else:
             print(f"Bienvenido {cliente.nombre} {cliente.apellido1}.")
             login = True
-        else:
-            print("Correo electrónico o contraseña incorrectos.")
     return cliente
 
 def registro():
@@ -599,6 +616,4 @@ def insertar_ticket_bd(ticket):
 def borrar_ticket_bd(ticket):
     query = f"DELETE FROM GENERA_TICKET WHERE id_ticket = {ticket.id_ticket}"
     conexion.ejecutar_query(query)
-
-
 main()
