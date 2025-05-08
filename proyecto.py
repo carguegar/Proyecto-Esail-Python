@@ -80,11 +80,11 @@ def menu_cliente(cliente):
         elif opcion == "2":
             gestionar_cesta_compra(cesta_compra,cliente)
         elif opcion == "3":
-            ver_tickets(cliente)
+           mostrar_tickets_cliente(cliente)
         elif opcion == "4":
             menu_modificar_cliente(cliente)
         elif opcion == "5":
-            borrar_cliente(cliente)
+            controlador_borrar_cliente(cliente)
             salir = True
         elif opcion == "6":
             print("Saliendo del programa.")
@@ -97,11 +97,11 @@ def menu_modificar_cliente(cliente):
     while salir == False:
         opcion = imprimir_menu_modificar_cliente()
         if opcion == "1":
-            modificar_numero_tarjeta_cliente(cliente)
+            controlador_modificar_numero_tarjeta_cliente(cliente)
         elif opcion == "2":
-            modificar_numero_telefono_cliente(cliente)
+            controlador_modificar_numero_telefono_cliente(cliente)
         elif opcion == "3":
-            modificar_contraseña_cliente(cliente)
+            controlador_modificar_contraseña_cliente(cliente)
         elif opcion == "4":
             salir = True
         else:
@@ -418,7 +418,7 @@ def mostrar_cesta_compra(cesta_compra):
     else:
         print("Cesta de compra:")
         for i in range(len(cesta_compra[0])):
-            print(f"{i+1}.- Producto: {cesta_compra[0][i].nombre_producto}, Cantidad: {cesta_compra[1][i]}, Precio: {cesta_compra[0][i].precio}, Precio Total: {cesta_compra[0][i].precio * cesta_compra[1][i]}")
+            print(f"{i+1}.- Producto: {cesta_compra[0][i].nombre_producto}, Cantidad: {cesta_compra[1][i]}, Precio: {cesta_compra[0][i].precio}, Precio Total: {float(cesta_compra[0][i].precio) * int(cesta_compra[1][i])}")
 
 def pedir_usuario_posicion_producto(cesta_compra):
     """
@@ -566,15 +566,9 @@ def comprar_productos_cesta(cesta_compra, cliente):
     @post: Los productos de la cesta de compra se compran y se insertan en la base de datos.
     @post: Se crea un ticket por cada producto comprado.
     """
-    error_cesta_vacia = False
-    if len(cesta_compra[0]) == 0:
-        print("No hay productos en la cesta.")
-        error_cesta_vacia = True
-    else:
-        crear_ticket(cesta_compra, cliente)
-        print("Productos comprados correctamente.")
-        cesta_compra[0].clear()
-        cesta_compra[1].clear()
+    crear_ticket(cesta_compra, cliente)
+    cesta_compra[0].clear()
+    cesta_compra[1].clear()
 
 def crear_ticket(cesta_compra, cliente):
     fecha = datetime.now()
@@ -603,7 +597,7 @@ def modificar_cantidad_producto(cesta_compra, posicion_producto, cantidad):
         del cesta_compra[0][posicion_producto]
         del cesta_compra[1][posicion_producto]
     else:
-        cesta_compra[1][int(posicion_producto)] = int(cantidad)
+        cesta_compra[1][posicion_producto] = cantidad
 
 def controlador_modificar_cantidad_producto(cesta_compra):
     """
@@ -611,9 +605,12 @@ def controlador_modificar_cantidad_producto(cesta_compra):
     @param cesta_compra(E/S): La cesta de compra del cliente.
     @post: Modifica la cantidad del producto en la cesta de compra.
     """
-    posicion_producto = pedir_usuario_posicion_producto(cesta_compra)
-    cantidad = input("Ingrese la nueva cantidad:\n")
-    modificar_cantidad_producto(cesta_compra,posicion_producto,cantidad)
+    if len(cesta_compra[0]) == 0:
+        print("No hay productos en la cesta.")
+    else:
+        posicion_producto = pedir_usuario_posicion_producto(cesta_compra)
+        cantidad = input("Ingrese la nueva cantidad:\n")
+        modificar_cantidad_producto(cesta_compra,posicion_producto,cantidad)
 
 def eliminar_producto_cesta(cesta_compra):
     """
@@ -621,9 +618,28 @@ def eliminar_producto_cesta(cesta_compra):
     @param cesta_compra(E/S): La cesta de compra del cliente.
     @post: Elimina el producto de la cesta de compra.
     """
-    posicion_producto = pedir_usuario_posicion_producto(cesta_compra)
-    modificar_cantidad_producto(cesta_compra,posicion_producto,0)
+    if len(cesta_compra[0]) == 0:
+        print("No hay productos en la cesta.")
+    else:
+        posicion_producto = pedir_usuario_posicion_producto(cesta_compra)
+        modificar_cantidad_producto(cesta_compra,posicion_producto,0)
 
+def comprobar_producto_en_carrito(carrito,producto):
+    """
+    Comprueba si un producto ya está en el carrito.
+
+    Args:
+        producto (Producto): El producto a comprobar.
+        carrito (list): La lista del carrito de compras.
+
+    Returns:
+        bool: True si el producto está en el carrito, False en caso contrario.
+    """
+    hay_producto = False
+    for i in range(len(carrito[0])):
+        if carrito[0][i].id_producto == producto.id_producto:
+            hay_producto = True
+    return hay_producto
   
 ####### BD ########
 
