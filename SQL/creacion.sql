@@ -11,11 +11,11 @@ CREATE TABLE CLIENTE (
     nombre VARCHAR(50) NOT NULL,
     apellido1 VARCHAR(50) NOT NULL,
     apellido2 VARCHAR(50),
-    DNI VARCHAR(20) NOT NULL UNIQUE,
-    numero_tarjeta VARCHAR(20),
-    numero_tlfn VARCHAR(15),
-    email VARCHAR(100) NOT NULL UNIQUE,
-    fecha_nacimiento DATE,
+    DNI VARCHAR(20) NOT NULL UNIQUE CHECK (DNI REGEXP '^[0-9]{8}[A-Z]$'),
+    numero_tarjeta VARCHAR(20) CHECK (numero_tarjeta REGEXP '^[0-9]{16}$'),
+    numero_tlfn VARCHAR(15) CHECK (numero_tlfn REGEXP '^[0-9]{9}$'),
+    email VARCHAR(100) NOT NULL UNIQUE CHECK (email REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z]{2,}$'),
+    fecha_nacimiento DATE NOT NULL,
     contraseña VARCHAR(255) NOT NULL
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE genera_ticket (
     id_cliente INT NOT NULL,
     id_producto INT NOT NULL,
     cantidad INT NOT NULL,
-    fecha DATE NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id_cliente),
     FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
 );

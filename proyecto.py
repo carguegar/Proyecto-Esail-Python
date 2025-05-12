@@ -387,7 +387,7 @@ def obtener_productos_paginados(pagina):
 
     @return list: Lista de objetos Producto de la página solicitada.
     """
-    productos_por_pagina = 7
+    productos_por_pagina = 6
     offset = (pagina - 1) * productos_por_pagina  # Calcular el desplazamiento
     query = f"SELECT * FROM PRODUCTO LIMIT {productos_por_pagina} OFFSET {offset}"
     resultados = conexion.obtener_datos(query)
@@ -571,8 +571,7 @@ def comprar_productos_cesta(cesta_compra, cliente):
     cesta_compra[1].clear()
 
 def crear_ticket(cesta_compra, cliente):
-    fecha = datetime.now()
-    fecha = fecha.strftime("%Y-%m-%d")
+    fecha = None
     for i in range(len(cesta_compra[0])):
         ticket = Ticket(
             id_ticket=None,
@@ -660,7 +659,8 @@ def borrar_producto_bd(producto):
     conexion.ejecutar_query(query)
 
 def insertar_ticket_bd(ticket):
-    query = f"INSERT INTO GENERA_TICKET (id_cliente, id_producto, fecha, cantidad) VALUES ({ticket.id_cliente}, {ticket.id_producto}, '{ticket.fecha}', {ticket.cantidad})"
+    fecha = "CURRENT_TIMESTAMP"
+    query = f"INSERT INTO GENERA_TICKET (id_cliente, id_producto, fecha, cantidad) VALUES ({ticket.id_cliente}, {ticket.id_producto}, {fecha}, {ticket.cantidad})"
     conexion.ejecutar_query(query)
 
 def borrar_ticket_bd(ticket):
