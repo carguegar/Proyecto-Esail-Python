@@ -393,6 +393,8 @@ def comprobar_fecha(fecha):
     # Puedes usar el módulo datetime para validar la fecha
     if fecha == "":
         fecha_correta = False
+    elif not re.match(patron, fecha):
+        fecha_correta=False
     else:
         anio, mes, dia = map(int, fecha.split('-'))
         if anio < 1900 or anio > 2023:
