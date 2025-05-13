@@ -658,6 +658,21 @@ def decrementar_pagina(pagina_actual,carrito,cliente):
 ### Cesta de compra ####
 ########################
 
+def calcular_precio_total(cesta_compra):
+    """
+    Calcula el precio total de los productos en la cesta de compra.
+
+    Args:
+        cesta_compra (list): Lista que contiene los productos y sus cantidades.
+
+    Returns:
+        float: Precio total de la cesta de compra.
+    """
+    total = 0
+    for producto, cantidad in zip(cesta_compra[0], cesta_compra[1]):
+        total += producto.precio * cantidad
+    return total
+
 # Función principal para mostrar la cesta de compra
 def mostrar_cesta_compra(cesta_compra, cliente, pagina_actual=1, productos_por_pagina=5):
     """
@@ -704,6 +719,10 @@ def mostrar_cesta_compra(cesta_compra, cliente, pagina_actual=1, productos_por_p
         boton_comprar = Button(frame_botones, text="Comprar Productos", font=("Arial", 14), bg="lightblue",
                             command=lambda: comprar(cesta_compra, cliente))
         boton_comprar.grid(row=0, column=1, padx=10)
+
+        etiqueta_precio_total = Label(frame_botones, text=f"Precio Total: {calcular_precio_total(cesta_compra):.2f}€", font=("Arial", 14), bg="#E6E6E6")
+        etiqueta_precio_total.grid(row=0, column=2, padx=10)
+        
     else:   
         mostrar_cesta_vacia(ventana)
 
@@ -1003,9 +1022,29 @@ def mostrar_detalles_ticket(tickets):
         etiqueta_cantidad = Label(frame_producto, text=f"Cantidad: {ticket['cantidad']}", font=("Arial", 14), bg="white")
         etiqueta_cantidad.pack(pady=5)
 
+        etiqueta_precio_total = Label(frame_producto, text=f"Precio Total: ${ticket['precio'] * ticket['cantidad']:.2f}", font=("Arial", 14), bg="white")
+        etiqueta_precio_total.pack(pady=5)
+
     # Botón para cerrar la ventana de detalles
     boton_cerrar = Button(ventana_detalles, text="Cerrar", font=("Arial", 12), bg="lightblue", command=ventana_detalles.destroy)
     boton_cerrar.pack(pady=10)
+    etiqueta_precio_total = Label(ventana_detalles, text=f"Precio Total: {calcular_precio_total_tickets(tickets):.2f}€", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_precio_total.pack(pady=10)
+
+def calcular_precio_total_tickets(tickets):
+    """
+    Calcula el precio total de los productos en un ticket.
+
+    Args:
+        tickets (list): Lista de tickets a calcular.
+
+    Returns:
+        float: Precio total del ticket.
+    """
+    total = 0
+    for ticket in tickets:
+        total += ticket['precio'] * ticket['cantidad']
+    return total
 ########################
 ###  DATOS CLIENTE  ####
 ########################
