@@ -1,6 +1,6 @@
 from clases import Cliente, Producto, Ticket
-from SQL.base_datos import *
-from SQL.base_datos import conexion
+from base_datos import *
+from base_datos import conexion
 from datetime import datetime
 
 
@@ -387,7 +387,7 @@ def obtener_productos_paginados(pagina):
 
     @return list: Lista de objetos Producto de la página solicitada.
     """
-    productos_por_pagina = 6
+    productos_por_pagina = 5
     offset = (pagina - 1) * productos_por_pagina  # Calcular el desplazamiento
     query = f"SELECT * FROM PRODUCTO LIMIT {productos_por_pagina} OFFSET {offset}"
     resultados = conexion.obtener_datos(query)

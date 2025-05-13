@@ -1,7 +1,7 @@
 from tkinter import *
 import tkinter.messagebox as Messagebox
 from tkinter import ttk
-from SQL.base_datos import *
+from base_datos import *
 from clases import *
 from proyecto import *
 from PIL import Image, ImageTk
@@ -17,7 +17,7 @@ ventana.resizable(False, False)
 # Interfaz de bienvenida
 def interfaz_bienvenida():
     # Cargar la imagen usando Pillow
-    imagen_original = Image.open("c:/Users/carlo/Desktop/python/images/portada.png")
+    imagen_original = Image.open(r"C:\proyecto\imagen\portada.png")  # Ruta de la imagen
     imagen = ImageTk.PhotoImage(imagen_original)
 
     # Mostrar la imagen en un Label
@@ -255,7 +255,7 @@ def mostrar_registro_usuario(condicion_fecha, condicion_mail, condicion_contrase
     entrada_contrasena = Entry(ventana, show="*", font=("Arial", 14))
     entrada_contrasena.grid(row=10, column=1, padx=10, pady=10)
     if condicion_contrasena == False:
-        etiqueta_error_contrasena = Label(ventana, text="Contraseña inválida: Debe contener al menos 6 caracteres, al menos una letra mayúscula, una letra minúscula y un número. ", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_contrasena = Label(ventana, text="Contraseña inválida: Debe contener entre 8 y 16 caracteres,\n al menos una letra mayúscula, una letra minúscula y un dígito. ", font=("Arial", 12), bg="#E6E6E6", fg="red")
         etiqueta_error_contrasena.grid(row=10, column=2, padx=10, pady=10, sticky="w")
         entrada_contrasena.config(bg="lightcoral")
     else:
@@ -304,7 +304,7 @@ def comprobar_contrasena(contrasena):
         bool: True si la contraseña es válida, False en caso contrario.
     """
     #regex para comprobar la contraseña Al menos 6 caracteres, al menos una letra mayúscula, una letra minúscula y un número.
-    patron = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$'
+    patron = r'^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$'
     if re.match(patron, contrasena):
         return True
     else:
@@ -481,7 +481,7 @@ def mostrar_productos(pagina_actual, carrito, cliente):
     Muestra los productos disponibles en la página actual y agrega botones de navegación.
     """
     # Cargar la imagen para el botón de la cesta
-    imagen_cesta = Image.open("c:/Users/carlo/Desktop/python/images/carro.png")  # Ruta de la imagen
+    imagen_cesta = Image.open(r"C:\proyecto\imagen\carro.png")  # Ruta de la imagen
     imagen_cesta = imagen_cesta.resize((150, 150), Image.Resampling.LANCZOS)  # Redimensionar la imagen
     imagen_cesta_tk = ImageTk.PhotoImage(imagen_cesta)
 

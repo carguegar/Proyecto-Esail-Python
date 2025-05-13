@@ -90,6 +90,10 @@ class Producto():
         self.__tipo = tipo
     def __str__(self):
         return f"Datos del producto:\nID: {self.id_producto}\nNombre: {self.nombre_producto}\nDescripcion: {self.descripcion}\nPrecio: {self.precio}\nFabricante: {self.fabricante}\nTipo: {self.tipo}\n"
+    def __eq__(self, other):
+        if isinstance(other, Producto):
+            return self.id_producto == other.id_producto
+        return False
     @property
     def id_producto(self):
         return self.__id_producto
