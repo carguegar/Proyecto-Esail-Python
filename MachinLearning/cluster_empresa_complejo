@@ -1,0 +1,111 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+# Configuración de generación de datos
+np.random.seed(10)  # Para reproducibilidad
+num_empresas = 400  # Número de empresas a generar
+
+# Generar datos aleatorios
+data = {
+    "Empresa": [f"Empresa_{i+1}" for i in range(num_empresas)],
+    "Annual_Revenue": np.random.randint(50000, 5000000, num_empresas),  # Ingresos anuales (50k - 5M)
+    "Number_of_Employees": np.random.randint(10, 1000, num_empresas),  # Número de empleados (10 - 1000)
+    "Years_in_Business": np.random.randint(1, 50, num_empresas),  # Años en el mercado (1 - 50)
+    "Market_Share": np.random.uniform(0.1, 20.0, num_empresas),  # Participación de mercado (0.1% - 20%)
+    "Industry_Type": np.random.choice(["Tecnología", "Manufactura", "Servicios", "Retail", "Salud"], num_empresas),  # Tipo de industria
+    "Geographic_Coverage": np.random.randint(1, 50, num_empresas),  # Cobertura geográfica (1 - 50 regiones)
+    "Annual_Growth_Rate": np.random.uniform(-5.0, 20.0, num_empresas),  # Tasa de crecimiento anual (-5% a 20%)
+    "Purchase_Frequency": np.random.randint(1, 100, num_empresas),  # Frecuencia de compras (1 - 100)
+    "Sustainability_Index": np.random.uniform(0, 100, num_empresas),  # Índice de sostenibilidad (0 - 100)
+}
+
+# Crear un DataFrame
+df_empresas = pd.DataFrame(data)
+
+# Guardar los datos en un archivo CSV
+df_empresas.to_csv("empresas_generadas.csv", index=False)
+
+
+file_path = 'c:/Users/carlo/Desktop/python/Proyecto-Esail-Python/MachinLearning/empresas_generadas.csv'
+data = pd.read_csv(file_path)
+
+# Preprocess the data
+# Convert categorical variables to numerical using one-hot encoding
+data_encoded = pd.get_dummies(data, columns=['Empresa', 'Industry_Type'], drop_first=True)
+
+# Standardize the numerical features
+scaler = StandardScaler()
+numerical_features = ['Annual_Revenue', 'Number_of_Employees', 'Years_in_Business', 'Market_Share', 'Geographic_Coverage', 'Annual_Growth_Rate', 'Purchase_Frequency', 'Sustainability_Index']
+data_encoded[numerical_features] = scaler.fit_transform(data_encoded[numerical_features])
+
+# Elbow method to determine the optimal number of clusters
+inertia = []
+k_range = range(1, 11)
+
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(data_encoded)
+    inertia.append(kmeans.inertia_)
+
+# Plot the elbow curve
+plt.figure(figsize=(8, 5))
+plt.plot(k_range, inertia, marker='o')
+plt.title('Elbow Method')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Inertia')
+plt.xticks(k_range)
+plt.grid()
+plt.show()
+
+# Calculate inertia (how far groups from centre of the cluster) and silhouette (how far are the clusters from each other) score for different numbers of clusters
+silhouette_scores = []
+
+for k in range(2, 11):  # Silhouette score is not defined for k=1
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(data_encoded)
+    cluster_labels = kmeans.labels_
+    
+    # Calculate silhouette score
+    silhouette_avg = silhouette_score(data_encoded, cluster_labels)
+    silhouette_scores.append(silhouette_avg)
+    print(f'For k={k}, Inertia={kmeans.inertia_:.2f}, Silhouette Score={silhouette_avg:.2f}')
+
+# Perform KMeans clustering with a specified number of clusters
+num_clusters = 7  # You can change this value to the desired number of clusters
+kmeans = KMeans(n_clusters=num_clusters, random_state=42)
+kmeans.fit(data_encoded)
+data_encoded['Cluster'] = kmeans.labels_
+
+# Get the centroids
+centroids = kmeans.cluster_centers_
+
+# Visualize the clusters and centroids
+plt.figure(figsize=(10, 7))
+sns.scatterplot(
+    x=data_encoded['Purchase_Frequency'],
+    y=data_encoded['Annual_Revenue'],
+    hue=data_encoded['Cluster'],
+    palette='viridis',
+    s=100
+)
+
+# Plot the centroids with labels
+for i, (x, y) in enumerate(zip(
+    centroids[:, numerical_features.index('Purchase_Frequency')],
+    centroids[:, numerical_features.index('Annual_Revenue')]
+)):
+    plt.scatter(x, y, c='red', s=200, marker='X', label=f'Centroid {i}')
+    plt.text(x, y, f'Cluster {i}', color='black', fontsize=10, ha='center', va='center')
+
+plt.title(f'Clusters of Clients with Centroids (k={num_clusters})')
+plt.xlabel('Purchase Frequency (Standardized)')
+plt.ylabel('Annual Revenue (Standardized)')
+plt.legend(title='Cluster')
+plt.grid()
+plt.show()

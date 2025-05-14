@@ -1,0 +1,401 @@
+Sector,Size,Purchase_Frequency,Average_Ticket,Customer_Lifetime,Satisfaction
+Manufacturing,Small Business,29,45774,6,5
+Financial Services,Medium Business,32,1702,12,3
+Retail,Small Business,9,43834,19,5
+Financial Services,Small Business,17,22535,5,1
+Manufacturing,Small Business,2,28593,9,3
+Retail,Large Enterprise,5,47373,13,1
+Technology,Medium Business,1,43720,13,5
+Technology,Large Enterprise,49,31451,7,2
+Retail,Medium Business,1,8631,3,1
+Healthcare,Medium Business,8,44601,15,3
+Technology,Small Business,41,32065,12,2
+Manufacturing,Large Enterprise,32,47509,14,1
+Financial Services,Small Business,9,29499,4,3
+Financial Services,Small Business,4,44412,13,3
+Technology,Small Business,40,9080,7,1
+Healthcare,Large Enterprise,32,15570,19,2
+Financial Services,Small Business,41,9480,20,2
+Manufacturing,Small Business,6,46070,2,5
+Technology,Small Business,2,34026,11,3
+Healthcare,Small Business,25,32605,7,3
+Financial Services,Medium Business,18,17089,15,5
+Manufacturing,Medium Business,32,31550,12,1
+Financial Services,Medium Business,2,5274,17,4
+Financial Services,Small Business,4,29676,13,5
+Technology,Small Business,35,27515,15,4
+Manufacturing,Medium Business,32,23049,15,2
+Healthcare,Medium Business,12,2362,18,2
+Manufacturing,Medium Business,44,3909,15,5
+Manufacturing,Small Business,27,9537,4,1
+Manufacturing,Small Business,34,6380,17,2
+Manufacturing,Small Business,18,38334,9,2
+Financial Services,Large Enterprise,38,34952,12,2
+Technology,Small Business,30,38941,10,5
+Healthcare,Medium Business,3,42596,14,2
+Technology,Medium Business,29,18520,13,4
+Healthcare,Medium Business,45,34181,8,5
+Manufacturing,Medium Business,43,15975,18,4
+Retail,Large Enterprise,45,24288,7,1
+Financial Services,Large Enterprise,28,48481,5,4
+Retail,Small Business,16,26233,10,3
+Manufacturing,Small Business,49,26925,2,5
+Retail,Small Business,46,41387,3,4
+Technology,Medium Business,42,10725,17,5
+Retail,Large Enterprise,32,34060,4,2
+Healthcare,Small Business,2,4467,15,1
+Manufacturing,Medium Business,10,29142,9,5
+Financial Services,Small Business,9,28582,19,3
+Technology,Large Enterprise,38,24471,7,1
+Healthcare,Large Enterprise,34,20202,9,4
+Financial Services,Small Business,2,24136,9,1
+Financial Services,Medium Business,4,27408,12,5
+Technology,Small Business,7,32535,1,3
+Retail,Medium Business,37,18266,19,3
+Healthcare,Large Enterprise,11,31726,10,1
+Healthcare,Large Enterprise,18,4632,1,5
+Financial Services,Large Enterprise,37,37130,17,3
+Healthcare,Small Business,50,6337,6,2
+Technology,Small Business,4,15418,4,5
+Manufacturing,Large Enterprise,46,9720,10,1
+Retail,Small Business,23,7179,7,1
+Retail,Medium Business,20,43578,7,3
+Manufacturing,Small Business,1,24566,11,1
+Financial Services,Large Enterprise,13,3732,2,2
+Financial Services,Large Enterprise,39,42144,18,5
+Manufacturing,Small Business,20,21743,8,5
+Healthcare,Small Business,9,41715,9,1
+Financial Services,Small Business,45,27095,7,1
+Technology,Small Business,47,49765,13,3
+Healthcare,Large Enterprise,14,28101,15,3
+Technology,Large Enterprise,11,16311,11,1
+Retail,Small Business,9,28684,4,4
+Retail,Large Enterprise,11,38373,14,1
+Manufacturing,Small Business,21,48066,14,1
+Retail,Medium Business,15,38249,13,4
+Manufacturing,Medium Business,18,35081,3,4
+Technology,Small Business,49,23640,18,2
+Financial Services,Large Enterprise,40,33227,12,1
+Manufacturing,Small Business,21,18632,7,4
+Financial Services,Small Business,14,40141,10,4
+Financial Services,Large Enterprise,12,9960,2,5
+Financial Services,Small Business,23,33171,13,1
+Healthcare,Large Enterprise,3,4002,18,1
+Healthcare,Medium Business,34,7156,11,3
+Financial Services,Medium Business,26,36513,8,3
+Manufacturing,Medium Business,21,12386,9,5
+Technology,Small Business,30,31287,20,1
+Healthcare,Small Business,23,21448,13,1
+Financial Services,Large Enterprise,13,23487,10,3
+Financial Services,Large Enterprise,14,42872,5,4
+Healthcare,Large Enterprise,1,31626,18,4
+Technology,Medium Business,12,33508,10,5
+Manufacturing,Large Enterprise,22,42384,15,2
+Manufacturing,Small Business,1,49390,6,2
+Financial Services,Small Business,28,21744,19,3
+Technology,Small Business,15,40890,4,5
+Financial Services,Small Business,41,48279,9,5
+Healthcare,Small Business,18,14714,20,3
+Retail,Large Enterprise,40,37287,8,1
+Retail,Large Enterprise,29,37439,19,1
+Healthcare,Small Business,43,20342,13,4
+Retail,Medium Business,30,14450,10,1
+Financial Services,Small Business,33,35691,8,2
+Healthcare,Large Enterprise,22,9244,15,4
+Retail,Large Enterprise,38,3755,6,4
+Technology,Large Enterprise,5,37219,8,4
+Retail,Medium Business,47,20953,11,3
+Healthcare,Small Business,3,12880,19,2
+Technology,Medium Business,48,831,10,4
+Financial Services,Small Business,22,23119,19,2
+Manufacturing,Small Business,21,12456,2,3
+Retail,Small Business,6,16732,16,3
+Manufacturing,Medium Business,7,35350,14,3
+Healthcare,Large Enterprise,35,16535,12,2
+Healthcare,Large Enterprise,43,9640,11,1
+Retail,Large Enterprise,4,37785,14,1
+Financial Services,Medium Business,9,42905,6,4
+Retail,Medium Business,34,1117,3,5
+Financial Services,Large Enterprise,47,1588,20,3
+Healthcare,Small Business,10,15058,11,5
+Financial Services,Medium Business,19,37094,11,1
+Technology,Large Enterprise,7,4116,4,1
+Retail,Medium Business,34,40039,6,1
+Retail,Large Enterprise,10,14513,16,5
+Technology,Small Business,3,18009,8,1
+Retail,Large Enterprise,27,49331,20,2
+Manufacturing,Large Enterprise,8,46734,5,3
+Financial Services,Large Enterprise,26,9720,11,3
+Technology,Small Business,44,7973,3,4
+Financial Services,Medium Business,25,34846,16,3
+Healthcare,Medium Business,5,25643,15,3
+Technology,Small Business,27,27674,15,4
+Technology,Medium Business,15,37290,14,3
+Technology,Small Business,47,23893,16,1
+Financial Services,Small Business,17,38094,5,5
+Healthcare,Medium Business,22,23438,4,2
+Retail,Large Enterprise,35,10477,16,3
+Retail,Large Enterprise,30,36175,15,5
+Manufacturing,Large Enterprise,8,23422,17,1
+Technology,Small Business,20,28228,1,4
+Financial Services,Small Business,18,5402,1,4
+Retail,Small Business,49,33619,2,2
+Manufacturing,Medium Business,37,22532,1,5
+Retail,Small Business,41,42290,5,2
+Retail,Small Business,20,39542,19,4
+Healthcare,Medium Business,19,23166,6,1
+Healthcare,Large Enterprise,26,46541,14,1
+Manufacturing,Large Enterprise,31,38903,2,1
+Healthcare,Small Business,43,18140,18,5
+Manufacturing,Large Enterprise,43,28277,13,5
+Technology,Large Enterprise,33,33662,8,2
+Healthcare,Small Business,34,49222,15,2
+Retail,Large Enterprise,5,27827,4,4
+Financial Services,Large Enterprise,30,10035,16,4
+Healthcare,Small Business,33,11619,1,4
+Healthcare,Small Business,27,15168,17,2
+Retail,Large Enterprise,26,41308,7,4
+Retail,Medium Business,15,29192,20,4
+Manufacturing,Medium Business,24,16392,7,2
+Healthcare,Small Business,26,30996,19,1
+Retail,Small Business,36,21978,2,4
+Healthcare,Large Enterprise,20,40494,19,1
+Healthcare,Small Business,47,37494,4,1
+Technology,Small Business,46,40129,12,2
+Retail,Small Business,29,9587,11,1
+Financial Services,Medium Business,36,44661,19,2
+Financial Services,Medium Business,22,34310,20,4
+Financial Services,Small Business,42,10949,7,4
+Retail,Small Business,21,40587,7,3
+Manufacturing,Medium Business,38,45640,17,5
+Retail,Medium Business,38,44688,14,4
+Retail,Medium Business,15,10560,9,5
+Manufacturing,Small Business,45,14665,18,3
+Retail,Large Enterprise,25,48743,10,1
+Financial Services,Small Business,23,43546,1,3
+Retail,Medium Business,39,36315,18,2
+Financial Services,Large Enterprise,1,5010,8,2
+Financial Services,Large Enterprise,14,29511,9,5
+Financial Services,Large Enterprise,11,23350,5,2
+Financial Services,Large Enterprise,46,6438,9,2
+Financial Services,Large Enterprise,14,9282,11,3
+Technology,Medium Business,13,30287,18,4
+Retail,Medium Business,2,39724,10,3
+Manufacturing,Small Business,50,12154,9,3
+Manufacturing,Large Enterprise,31,17846,5,1
+Financial Services,Small Business,37,20156,14,3
+Healthcare,Large Enterprise,42,30425,4,1
+Retail,Large Enterprise,28,13280,14,5
+Technology,Large Enterprise,27,49115,15,4
+Technology,Large Enterprise,39,36070,18,2
+Financial Services,Small Business,14,28082,1,1
+Healthcare,Large Enterprise,14,21505,4,5
+Manufacturing,Medium Business,26,29813,4,2
+Manufacturing,Large Enterprise,19,29416,6,3
+Healthcare,Medium Business,7,22081,17,5
+Retail,Medium Business,23,27258,2,2
+Healthcare,Small Business,8,25365,14,1
+Retail,Small Business,44,25962,13,2
+Technology,Medium Business,37,41335,9,1
+Manufacturing,Small Business,5,47307,6,1
+Financial Services,Medium Business,30,44006,12,1
+Financial Services,Small Business,49,6756,8,4
+Financial Services,Small Business,43,29066,4,3
+Retail,Large Enterprise,35,16324,7,1
+Technology,Medium Business,40,21076,7,4
+Financial Services,Small Business,44,41048,17,1
+Financial Services,Large Enterprise,18,34728,13,3
+Technology,Medium Business,1,15571,17,3
+Financial Services,Small Business,22,22260,15,1
+Manufacturing,Medium Business,45,7180,13,4
+Technology,Large Enterprise,35,2463,3,1
+Retail,Small Business,1,48055,12,5
+Healthcare,Small Business,25,5848,12,3
+Healthcare,Small Business,17,32225,16,1
+Technology,Medium Business,33,11092,6,2
+Retail,Small Business,19,2111,19,1
+Healthcare,Medium Business,34,33090,20,2
+Manufacturing,Medium Business,16,14261,8,3
+Financial Services,Large Enterprise,10,41005,12,3
+Technology,Medium Business,4,14290,16,2
+Retail,Medium Business,8,2423,13,3
+Financial Services,Large Enterprise,25,25116,9,5
+Healthcare,Large Enterprise,49,12629,10,5
+Retail,Medium Business,45,7943,20,5
+Healthcare,Large Enterprise,36,44673,18,1
+Healthcare,Large Enterprise,31,12848,1,3
+Manufacturing,Large Enterprise,30,31965,8,3
+Financial Services,Large Enterprise,13,2870,7,5
+Healthcare,Medium Business,34,30633,13,1
+Technology,Medium Business,5,31414,8,4
+Technology,Large Enterprise,49,17646,16,2
+Manufacturing,Small Business,38,41114,17,4
+Financial Services,Small Business,22,38173,14,1
+Retail,Medium Business,45,45981,5,2
+Technology,Small Business,6,38849,4,5
+Retail,Large Enterprise,17,23997,12,5
+Healthcare,Medium Business,1,20030,17,4
+Technology,Medium Business,49,1422,20,3
+Manufacturing,Medium Business,26,28872,5,1
+Retail,Large Enterprise,47,13253,12,4
+Technology,Large Enterprise,19,43153,18,3
+Healthcare,Large Enterprise,31,15538,10,3
+Retail,Small Business,34,38634,13,4
+Technology,Medium Business,16,49973,6,2
+Financial Services,Large Enterprise,32,19760,12,2
+Technology,Small Business,43,12537,13,4
+Retail,Medium Business,31,13647,1,2
+Retail,Large Enterprise,48,8034,13,1
+Healthcare,Small Business,20,23937,2,2
+Healthcare,Large Enterprise,19,7897,13,1
+Manufacturing,Small Business,1,8689,14,5
+Retail,Medium Business,15,2680,11,2
+Healthcare,Large Enterprise,2,33193,9,1
+Retail,Small Business,43,15893,7,1
+Retail,Large Enterprise,4,46973,17,1
+Retail,Medium Business,42,26243,19,5
+Retail,Large Enterprise,8,1812,19,1
+Manufacturing,Large Enterprise,2,15478,14,2
+Retail,Small Business,44,1062,7,4
+Retail,Large Enterprise,49,28050,14,5
+Financial Services,Large Enterprise,33,41107,4,2
+Manufacturing,Small Business,43,3700,1,2
+Retail,Large Enterprise,15,21564,16,2
+Technology,Medium Business,38,49211,15,4
+Healthcare,Small Business,2,23769,6,5
+Financial Services,Large Enterprise,41,2221,15,5
+Manufacturing,Small Business,39,19917,9,4
+Financial Services,Large Enterprise,10,49144,5,3
+Retail,Large Enterprise,27,3180,12,2
+Retail,Small Business,16,36218,9,4
+Financial Services,Large Enterprise,18,25106,17,5
+Manufacturing,Medium Business,21,40662,1,2
+Financial Services,Large Enterprise,35,29010,5,2
+Technology,Medium Business,44,20308,15,4
+Manufacturing,Medium Business,15,43316,12,4
+Manufacturing,Large Enterprise,19,18235,10,1
+Manufacturing,Medium Business,35,31021,11,2
+Financial Services,Medium Business,30,41306,17,5
+Financial Services,Small Business,17,7467,14,5
+Financial Services,Small Business,34,21029,12,2
+Retail,Medium Business,8,42895,8,1
+Manufacturing,Medium Business,37,23775,19,2
+Healthcare,Small Business,32,42231,10,2
+Financial Services,Small Business,17,24965,2,5
+Manufacturing,Medium Business,37,34206,4,2
+Technology,Large Enterprise,44,39182,20,4
+Manufacturing,Small Business,4,46701,14,4
+Healthcare,Large Enterprise,47,25271,1,2
+Financial Services,Medium Business,19,35868,5,1
+Financial Services,Medium Business,42,18723,5,1
+Retail,Small Business,2,31628,2,3
+Healthcare,Small Business,34,752,14,2
+Retail,Small Business,12,7049,19,2
+Retail,Small Business,46,8256,15,5
+Manufacturing,Small Business,19,19522,16,1
+Manufacturing,Large Enterprise,41,8672,16,4
+Retail,Medium Business,39,8769,9,4
+Healthcare,Medium Business,40,40275,4,2
+Technology,Medium Business,18,42222,8,2
+Manufacturing,Large Enterprise,28,9355,9,5
+Technology,Small Business,33,29110,11,3
+Healthcare,Small Business,11,17374,6,1
+Technology,Small Business,48,36033,9,1
+Manufacturing,Large Enterprise,43,18316,8,4
+Financial Services,Small Business,10,49915,4,4
+Technology,Large Enterprise,19,3526,18,4
+Financial Services,Large Enterprise,9,49020,2,3
+Technology,Medium Business,13,18138,7,4
+Retail,Small Business,36,15269,3,3
+Manufacturing,Small Business,24,24565,11,5
+Healthcare,Large Enterprise,43,40815,14,5
+Technology,Medium Business,27,40587,9,4
+Retail,Large Enterprise,10,40704,11,3
+Technology,Large Enterprise,42,31823,8,3
+Retail,Small Business,12,5038,4,5
+Technology,Small Business,22,46870,16,2
+Healthcare,Small Business,25,40902,20,2
+Healthcare,Medium Business,39,25579,16,2
+Manufacturing,Large Enterprise,14,15088,13,5
+Manufacturing,Medium Business,18,44673,16,5
+Technology,Small Business,40,20961,17,5
+Retail,Medium Business,29,41938,12,3
+Healthcare,Small Business,5,27233,13,2
+Manufacturing,Medium Business,16,1134,7,5
+Retail,Large Enterprise,43,37819,15,3
+Technology,Medium Business,23,32946,18,5
+Manufacturing,Medium Business,45,23981,17,3
+Technology,Medium Business,31,48161,18,2
+Healthcare,Large Enterprise,35,26305,10,5
+Manufacturing,Large Enterprise,16,2232,15,5
+Financial Services,Medium Business,40,45364,12,5
+Manufacturing,Large Enterprise,10,33880,13,2
+Manufacturing,Medium Business,34,17092,1,3
+Financial Services,Small Business,38,32523,6,1
+Technology,Medium Business,36,11283,9,4
+Retail,Small Business,38,39802,12,2
+Manufacturing,Small Business,45,10258,3,4
+Technology,Medium Business,44,19402,18,2
+Healthcare,Medium Business,2,11542,19,4
+Technology,Small Business,3,36078,9,4
+Manufacturing,Medium Business,15,15292,4,2
+Retail,Medium Business,37,6310,5,2
+Retail,Small Business,7,48710,1,3
+Financial Services,Small Business,17,40775,1,4
+Technology,Small Business,5,47251,8,3
+Technology,Small Business,21,7889,20,2
+Retail,Small Business,39,34216,5,2
+Technology,Small Business,24,15233,14,4
+Retail,Large Enterprise,13,29346,13,5
+Technology,Small Business,14,38975,15,1
+Manufacturing,Large Enterprise,41,49798,3,3
+Healthcare,Medium Business,35,5256,12,2
+Manufacturing,Medium Business,40,12143,14,5
+Retail,Large Enterprise,37,26461,5,4
+Manufacturing,Large Enterprise,7,18171,8,5
+Technology,Small Business,3,48250,8,3
+Healthcare,Medium Business,1,33629,3,5
+Retail,Small Business,24,34289,13,1
+Retail,Medium Business,49,38544,12,5
+Healthcare,Small Business,49,20966,4,1
+Technology,Small Business,21,14667,15,3
+Retail,Small Business,41,44910,5,2
+Manufacturing,Large Enterprise,40,19756,8,5
+Manufacturing,Small Business,10,13446,2,3
+Healthcare,Small Business,41,13666,14,1
+Financial Services,Medium Business,43,24943,17,5
+Retail,Medium Business,29,34363,5,4
+Retail,Medium Business,46,39912,6,1
+Manufacturing,Medium Business,31,39664,3,4
+Healthcare,Large Enterprise,18,9330,6,5
+Technology,Medium Business,10,37377,5,3
+Healthcare,Medium Business,7,42497,13,3
+Retail,Medium Business,20,38680,2,4
+Healthcare,Large Enterprise,14,37719,3,4
+Manufacturing,Medium Business,39,17986,11,1
+Technology,Medium Business,21,45351,4,3
+Technology,Medium Business,38,20665,4,5
+Technology,Medium Business,50,38185,5,5
+Retail,Large Enterprise,19,31392,4,4
+Manufacturing,Large Enterprise,4,23266,12,2
+Financial Services,Medium Business,31,23976,20,1
+Technology,Medium Business,18,25522,10,4
+Financial Services,Large Enterprise,20,43097,1,2
+Manufacturing,Large Enterprise,36,12351,11,3
+Financial Services,Large Enterprise,8,40214,2,5
+Retail,Medium Business,19,31631,9,5
+Technology,Small Business,40,3128,12,1
+Retail,Medium Business,46,22443,8,1
+Manufacturing,Medium Business,12,29381,1,4
+Technology,Large Enterprise,2,30908,12,4
+Manufacturing,Large Enterprise,39,7145,18,3
+Retail,Large Enterprise,37,1958,9,4
+Technology,Medium Business,27,17925,15,5
+Manufacturing,Small Business,15,16043,10,2
+Technology,Small Business,17,34590,17,5
+Retail,Medium Business,4,45615,9,1
+Retail,Medium Business,22,14509,13,1
+Retail,Medium Business,33,31497,18,1
+Financial Services,Small Business,13,27043,14,1
+Retail,Medium Business,5,7478,10,3
+Technology,Medium Business,15,48544,13,2
