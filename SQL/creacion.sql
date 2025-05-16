@@ -16,7 +16,7 @@ CREATE TABLE CLIENTE (
     DNI VARCHAR(20) NOT NULL UNIQUE CHECK (DNI REGEXP '^[0-9]{8}[A-Z]$'),
     numero_tarjeta VARCHAR(20) CHECK (numero_tarjeta REGEXP '^[0-9]{16}$'),
     numero_tlfn VARCHAR(15) CHECK (numero_tlfn REGEXP '^[0-9]{9}$'),
-    email VARCHAR(100) NOT NULL UNIQUE CHECK (email REGEXP '^[^@]+@[^@]+\.[a-zA-Z]{2,}$'),
+    email VARCHAR(100) NOT NULL UNIQUE CHECK (email REGEXP '^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'),
     fecha_nacimiento DATE NOT NULL,
     contraseña VARCHAR(255) NOT NULL
 );

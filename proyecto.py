@@ -1,6 +1,6 @@
 from clases import Cliente, Producto, Ticket
-from base_datos import *
-from base_datos import conexion
+from SQL.base_datos import *
+from SQL.base_datos import conexion
 from datetime import datetime
 
 
@@ -124,7 +124,46 @@ def gestionar_cesta_compra(cesta_compra,cliente):
 #############################
 ### FUNCIONES DE BORRADO ####
 #############################
+def traer_correos_bd():
+    '''
+    @brief: Trae los correos de la base de datos.
+    @pre: Se requiere una conexión a la base de datos.
+    @post: Trae los correos de la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @return: Una lista con los correos de la base de datos.
+    
+    '''
 
+    query = "SELECT email FROM CLIENTE"
+    resultados = conexion.obtener_datos(query)
+    correos = []
+    if resultados:
+        for correo in resultados:
+            correos.append(correo['email'])
+        return correos
+    else:
+        return False
+
+def traer_dni_bd():
+    '''
+    @brief: Trae los DNI de la base de datos.
+    @pre: Se requiere una conexión a la base de datos.
+    @post: Trae los DNI de la base de datos.
+    @param conexion: La conexión a la base de datos.
+    @return: Una lista con los DNI de la base de datos.
+    
+    '''
+
+    query = "SELECT DNI FROM CLIENTE"
+    resultados = conexion.obtener_datos(query)
+    dni = []
+    if resultados:
+        for dni_cliente in resultados:
+            dni.append(dni_cliente['DNI'])
+        return dni
+    else:
+        return False
+    
 def borrar_tikets(cliente):
     '''
     @brief: 

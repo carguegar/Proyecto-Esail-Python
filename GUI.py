@@ -1,7 +1,7 @@
 from tkinter import *
 import tkinter.messagebox as Messagebox
 from tkinter import ttk
-from base_datos import *
+from SQL.base_datos import *
 from clases import *
 from proyecto import *
 from PIL import Image, ImageTk
@@ -10,14 +10,14 @@ import re #para las expresiones regulares
 # Crear la ventana principal
 ventana = Tk()
 ventana.title("CristoMarket")
-ventana.geometry("1920x1080")
+ventana.geometry("1600x900")
 ventana.config(bg="#E6E6E6") 
 ventana.resizable(False, False)
 
 # Interfaz de bienvenida
 def interfaz_bienvenida():
     # Cargar la imagen usando Pillow
-    imagen_original = Image.open(r"C:\proyecto\imagen\portada.png")  # Ruta de la imagen
+    imagen_original = Image.open(r"C:\Users\carlo\Desktop\python\Proyecto-Esail-Python\images\portada.png")  # Ruta de la imagen
     imagen = ImageTk.PhotoImage(imagen_original)
 
     # Mostrar la imagen en un Label
@@ -33,7 +33,7 @@ def interfaz_bienvenida():
     boton_login = Button(frame_botones, text="Iniciar Sesión", font=("Arial", 14), command=lambda: actualizar_ventana(mostrar_login), bg="lightblue")
     boton_login.grid(row=0, column=0, padx=10, pady=10)
 
-    boton_registro = Button(frame_botones, text="Registrarse", font=("Arial", 14), command=lambda: actualizar_ventana(lambda: mostrar_registro_usuario(True, True, True, True, True, True, True, True, True)), bg="lightblue")
+    boton_registro = Button(frame_botones, text="Registrarse", font=("Arial", 14), command=lambda: actualizar_ventana(lambda: mostrar_registro_usuario(True, True, True, True, True, True, True, True, True,False,False)), bg="lightblue")
     boton_registro.grid(row=0, column=1, padx=10, pady=10)
 
     boton_salir = Button(frame_botones, text="Salir", font=("Arial", 14), command=cerrar_programa, bg="lightblue")
@@ -46,36 +46,45 @@ def mostrar_menu_principal(carrito, cliente):
     # Limpiar la ventana antes de agregar nuevos widgets
     limpiar_ventana(ventana)
 
+    # Configurar las columnas para centrar el contenido horizontalmente
+    ventana.grid_columnconfigure(0, weight=1)  # Columna izquierda
+    ventana.grid_columnconfigure(1, weight=0)  # Columna central (contenido)
+    ventana.grid_columnconfigure(2, weight=1)  # Columna derecha
+
+    # Crear un frame para centrar el contenido
+    frame_contenido = Frame(ventana, bg="#E6E6E6")
+    frame_contenido.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)  # Columna central
+
     # Etiqueta de bienvenida
-    etiqueta_bienvenida = Label(ventana, text="Bienvenido a CristoMarket", font=("Arial", 20), bg="#E6E6E6")
+    etiqueta_bienvenida = Label(frame_contenido, text="Bienvenido a CristoMarket", font=("Arial", 20), bg="#E6E6E6")
     etiqueta_bienvenida.grid(row=0, column=0, columnspan=2, pady=20)
 
     # Botón para ver productos
-    boton_ver_productos = Button(ventana, text="Ver Productos", font=("Arial", 14),
+    boton_ver_productos = Button(frame_contenido, text="Ver Productos", font=("Arial", 14),
                                  command=lambda: actualizar_ventana(lambda: mostrar_productos(1, carrito, cliente)),
                                  bg="lightblue")
     boton_ver_productos.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
 
     # Botón para ver carrito
-    boton_ver_carrito = Button(ventana, text="Ver Carrito", font=("Arial", 14),
+    boton_ver_carrito = Button(frame_contenido, text="Ver Carrito", font=("Arial", 14),
                                command=lambda: actualizar_ventana(lambda: mostrar_cesta_compra(carrito, cliente)),
                                bg="lightblue")
     boton_ver_carrito.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
 
     # Botón para ver tickets
-    boton_ver_tickets = Button(ventana, text="Ver Tickets", font=("Arial", 14),
-                               command=lambda: actualizar_ventana(lambda: mostrar_tickets(carrito,cliente)),
+    boton_ver_tickets = Button(frame_contenido, text="Ver Tickets", font=("Arial", 14),
+                               command=lambda: actualizar_ventana(lambda: mostrar_tickets(carrito, cliente)),
                                bg="lightblue")
     boton_ver_tickets.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
 
     # Botón para modificar datos del usuario
-    boton_modificar_datos = Button(ventana, text="Modificar Datos Del Usuario", font=("Arial", 14),
-                                   command=lambda: actualizar_ventana(lambda: mostrar_datos_cliente(carrito,cliente)),
+    boton_modificar_datos = Button(frame_contenido, text="Modificar Datos Del Usuario", font=("Arial", 14),
+                                   command=lambda: actualizar_ventana(lambda: mostrar_datos_cliente(carrito, cliente)),
                                    bg="lightblue")
     boton_modificar_datos.grid(row=4, column=0, padx=10, pady=10, sticky="ew")
 
     # Botón para cerrar sesión
-    boton_cerrar_sesion = Button(ventana, text="Cerrar Sesión", font=("Arial", 14),
+    boton_cerrar_sesion = Button(frame_contenido, text="Cerrar Sesión", font=("Arial", 14),
                                  command=cerrar_sesion, bg="lightblue")
     boton_cerrar_sesion.grid(row=5, column=0, padx=10, pady=10, sticky="ew")
 
@@ -89,6 +98,7 @@ def actualizar_ventana(funcion_actualizacion):
     """
     for widget in ventana.winfo_children():
         widget.destroy()
+    ventana.geometry("1600x900")
     funcion_actualizacion()
 
 # Función para iniciar sesión
@@ -114,168 +124,233 @@ def funcion_login(correo, contrasena):
 
 # Ejemplo de cómo centrar el contenido en una función
 def mostrar_login():
+    ventana.grid_columnconfigure(0, weight=1)
+    ventana.grid_columnconfigure(1, weight=0)
+    ventana.grid_columnconfigure(2, weight=1)
+
+
+    # Correo
     etiqueta_correo = Label(ventana, text="Correo Electrónico:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_correo.grid(row=0, column=0, padx=10, pady=10)
-    entrada_correo = Entry(ventana, font=("Arial", 14))
-    entrada_correo.grid(row=0, column=1, padx=10, pady=10)
+    etiqueta_correo.grid(row=0, column=1, padx=10, pady=(20, 2), sticky="n")
+    entrada_correo = Entry(ventana, font=("Arial", 14), width=18)
+    entrada_correo.grid(row=1, column=1, padx=10, pady=(2, 10), sticky="n")
+
+    # Contraseña
     etiqueta_contrasena = Label(ventana, text="Contraseña:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_contrasena.grid(row=1, column=0, padx=10, pady=10)
-    entrada_contrasena = Entry(ventana, show="*", font=("Arial", 14))
-    entrada_contrasena.grid(row=1, column=1, padx=10, pady=10)
-    # Asociar el evento "Enter" al campo de contraseña
+    etiqueta_contrasena.grid(row=2, column=1, padx=10, pady=(10, 2), sticky="n")
+    entrada_contrasena = Entry(ventana, show="*", font=("Arial", 14), width=18)
+    entrada_contrasena.grid(row=3, column=1, padx=10, pady=(2, 10), sticky="n")
+
     entrada_contrasena.bind("<Return>", lambda event: funcion_login(entrada_correo.get(), entrada_contrasena.get()))
-    boton_login = Button(ventana, text="Iniciar Sesión", font=("Arial", 14), command=lambda: funcion_login(entrada_correo.get(), entrada_contrasena.get()), bg="lightblue")
-    boton_login.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
-    #botom para registrarse
+
+    # Botón login
+    boton_login = Button(ventana, text="Iniciar Sesión", font=("Arial", 14),
+                         command=lambda: funcion_login(entrada_correo.get(), entrada_contrasena.get()), bg="lightblue")
+    boton_login.grid(row=4, column=1, padx=10, pady=10, sticky="n")
+
+    # Botón para registrarse
     etiqueta_registro = Label(ventana, text="¿No tienes cuenta?", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_registro.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
-    boton_registro = Button(ventana, text="Registrarse", font=("Arial", 14), command=lambda: actualizar_ventana(lambda:mostrar_registro_usuario(True,True,True,True,True,True,True,True,True)), bg="lightblue")
-    boton_registro.grid(row=3, column=2, columnspan=2, padx=10, pady=10)
+    etiqueta_registro.grid(row=5, column=1, padx=10, pady=(20, 2), sticky="n")
+    boton_registro = Button(ventana, text="Registrarse", font=("Arial", 14),
+                            command=lambda: actualizar_ventana(lambda:mostrar_registro_usuario(True,True,True,True,True,True,True,True,True,False,False)), bg="lightblue")
+    boton_registro.grid(row=6, column=1, padx=10, pady=(2, 10), sticky="n")
 
 #funcion para registrar un usuario
 datos_Registro = None
 
-def mostrar_registro_usuario(condicion_fecha, condicion_mail, condicion_contrasena, condicion_DNI, condicion_tlf, condicion_numero_tarjeta, condicion_nombre, condicion_apellido1, condicion_apellido2):
+def mostrar_registro_usuario(condicion_fecha, condicion_mail, condicion_contrasena, condicion_DNI, condicion_tlf, condicion_numero_tarjeta, condicion_nombre, condicion_apellido1, condicion_apellido2, unicidad_dni, unicidad_mail):
     global datos_Registro
-    etiqueta_titulo = Label(ventana, text="Registro de Usuario", font=("Arial", 20), bg="#E6E6E6")
-    etiqueta_titulo.grid(row=0, column=0, columnspan=2, pady=20)
 
-    etiqueta_nombre = Label(ventana, text="Nombre*:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_nombre.grid(row=2, column=0, padx=10, pady=10)
-    entrada_nombre = Entry(ventana, font=("Arial", 14))
-    entrada_nombre.grid(row=2, column=1, padx=10, pady=10)
+    # Configura las columnas del grid de la ventana para centrar el frame
+    ventana.grid_columnconfigure(0, weight=1)
+    ventana.grid_columnconfigure(1, weight=0)
+    ventana.grid_columnconfigure(2, weight=1)
+
+    # Crea un frame centrado
+    frame = Frame(ventana, bg="#E6E6E6")
+    frame.grid(row=0, column=1, sticky="n", padx=40, pady=20)
+
+    etiqueta_titulo = Label(frame, text="Registro de Usuario", font=("Arial", 20), bg="#E6E6E6")
+    etiqueta_titulo.grid(row=0, column=0, columnspan=3, pady=20, sticky="n")
+
+    etiqueta_nombre = Label(frame, text="Nombre*:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_nombre.grid(row=1, column=0, padx=10, pady=5, sticky="n")
+    entrada_nombre = Entry(frame, font=("Arial", 14), width=20)
+    entrada_nombre.grid(row=1, column=1, padx=10, pady=5, sticky="n")
     if condicion_nombre == False:
-        etiqueta_error_nombre = Label(ventana, text="Nombre inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
-        etiqueta_error_nombre.grid(row=2, column=2, padx=10, pady=10, sticky="w")
+        etiqueta_error_nombre = Label(frame, text="Nombre inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_nombre.grid(row=1, column=2, padx=10, pady=5, sticky="w")
         entrada_nombre.config(bg="lightcoral")
     else:
         entrada_nombre.config(bg="white")
         if datos_Registro is not None:
             entrada_nombre.insert(0, datos_Registro["nombre"])
 
-    etiqueta_apellido1 = Label(ventana, text="Apellido 1*:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_apellido1.grid(row=3, column=0, padx=10, pady=10)
-    entrada_apellido1 = Entry(ventana, font=("Arial", 14))
-    entrada_apellido1.grid(row=3, column=1, padx=10, pady=10)
+    etiqueta_apellido1 = Label(frame, text="Apellido 1*:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_apellido1.grid(row=2, column=0, padx=10, pady=5, sticky="n")
+    entrada_apellido1 = Entry(frame, font=("Arial", 14), width=20)
+    entrada_apellido1.grid(row=2, column=1, padx=10, pady=5, sticky="n")
     if condicion_apellido1 == False:
-        etiqueta_error_apellido1 = Label(ventana, text="Apellido inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
-        etiqueta_error_apellido1.grid(row=3, column=2, padx=10, pady=10, sticky="w")
+        etiqueta_error_apellido1 = Label(frame, text="Apellido inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_apellido1.grid(row=2, column=2, padx=10, pady=5, sticky="w")
         entrada_apellido1.config(bg="lightcoral")
     else:
         entrada_apellido1.config(bg="white")
         if datos_Registro is not None:
             entrada_apellido1.insert(0, datos_Registro["apellido1"])
 
-    etiqueta_apellido2 = Label(ventana, text="Apellido 2:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_apellido2.grid(row=4, column=0, padx=10, pady=10)
-    entrada_apellido2 = Entry(ventana, font=("Arial", 14))
-    entrada_apellido2.grid(row=4, column=1, padx=10, pady=10)
+    etiqueta_apellido2 = Label(frame, text="Apellido 2:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_apellido2.grid(row=3, column=0, padx=10, pady=5, sticky="n")
+    entrada_apellido2 = Entry(frame, font=("Arial", 14), width=20)
+    entrada_apellido2.grid(row=3, column=1, padx=10, pady=5, sticky="n")
     if datos_Registro is not None:
         apellido2 = datos_Registro["apellido2"]
     else:
         apellido2 = ""
     if apellido2 != "":
         if condicion_apellido2 == False:
-            etiqueta_error_apellido2 = Label(ventana, text="Apellido inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
-            etiqueta_error_apellido2.grid(row=4, column=2, padx=10, pady=10, sticky="w")
+            etiqueta_error_apellido2 = Label(frame, text="Apellido inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
+            etiqueta_error_apellido2.grid(row=3, column=2, padx=10, pady=5, sticky="w")
             entrada_apellido2.config(bg="lightcoral")
         else:
             entrada_apellido2.config(bg="white")
             if datos_Registro is not None:
                 entrada_apellido2.insert(0, datos_Registro["apellido2"])
 
-    etiqueta_dni = Label(ventana, text="DNI*:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_dni.grid(row=5, column=0, padx=10, pady=10)
-    entrada_dni = Entry(ventana, font=("Arial", 14))
-    entrada_dni.grid(row=5, column=1, padx=10, pady=10)
+    etiqueta_dni = Label(frame, text="DNI*:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_dni.grid(row=4, column=0, padx=10, pady=5, sticky="n")
+    entrada_dni = Entry(frame, font=("Arial", 14), width=20)
+    entrada_dni.grid(row=4, column=1, padx=10, pady=5, sticky="n")
     if condicion_DNI == False:
-        etiqueta_error_dni = Label(ventana, text="DNI inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
-        etiqueta_error_dni.grid(row=5, column=2, padx=10, pady=10, sticky="w")
+        etiqueta_error_dni = Label(frame, text="DNI inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_dni.grid(row=4, column=2, padx=10, pady=5, sticky="w")
+        entrada_dni.config(bg="lightcoral")
+    elif unicidad_dni:
+        etiqueta_error_dni = Label(frame, text="El DNI introducido ya existe", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_dni.grid(row=4, column=2, padx=10, pady=5, sticky="w")
         entrada_dni.config(bg="lightcoral")
     else:
         entrada_dni.config(bg="white")
         if datos_Registro is not None:
             entrada_dni.insert(0, datos_Registro["dni"])
 
-    etiqueta_numero_tarjeta = Label(ventana, text="Número de Tarjeta*:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_numero_tarjeta.grid(row=6, column=0, padx=10, pady=10)
-    entrada_numero_tarjeta = Entry(ventana, font=("Arial", 14))
-    entrada_numero_tarjeta.grid(row=6, column=1, padx=10, pady=10)
+    etiqueta_numero_tarjeta = Label(frame, text="Número de Tarjeta*:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_numero_tarjeta.grid(row=5, column=0, padx=10, pady=5, sticky="n")
+    entrada_numero_tarjeta = Entry(frame, font=("Arial", 14), width=20)
+    entrada_numero_tarjeta.grid(row=5, column=1, padx=10, pady=5, sticky="n")
     if condicion_numero_tarjeta == False:
-        etiqueta_error_numero_tarjeta = Label(ventana, text="Número de tarjeta inválido: debe contener 16 dígitos", font=("Arial", 12), bg="#E6E6E6", fg="red")
-        etiqueta_error_numero_tarjeta.grid(row=6, column=2, padx=10, pady=10, sticky="w")
+        etiqueta_error_numero_tarjeta = Label(frame, text="Número de tarjeta inválido: debe contener 16 dígitos", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_numero_tarjeta.grid(row=5, column=2, padx=10, pady=5, sticky="w")
         entrada_numero_tarjeta.config(bg="lightcoral")  
     else:
         entrada_numero_tarjeta.config(bg="white")
         if datos_Registro is not None:
             entrada_numero_tarjeta.insert(0, datos_Registro["numero_tarjeta"])
 
-    etiqueta_numero_tlf = Label(ventana, text="Número de Teléfono*:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_numero_tlf.grid(row=7, column=0, padx=10, pady=10)
-    entrada_numero_tlf = Entry(ventana, font=("Arial", 14))
-    entrada_numero_tlf.grid(row=7, column=1, padx=10, pady=10)
+    etiqueta_numero_tlf = Label(frame, text="Número de Teléfono*:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_numero_tlf.grid(row=6, column=0, padx=10, pady=5, sticky="n")
+    entrada_numero_tlf = Entry(frame, font=("Arial", 14), width=20)
+    entrada_numero_tlf.grid(row=6, column=1, padx=10, pady=5, sticky="n")
     if condicion_tlf == False:  
-        etiqueta_error_numero_tlf = Label(ventana, text="Número de teléfono inválido: Debe contener 9 dígitos", font=("Arial", 12), bg="#E6E6E6", fg="red")
-        etiqueta_error_numero_tlf.grid(row=7, column=2, padx=10, pady=10, sticky="w")
+        etiqueta_error_numero_tlf = Label(frame, text="Número de teléfono inválido: Debe contener 9 dígitos", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_numero_tlf.grid(row=6, column=2, padx=10, pady=5, sticky="w")
         entrada_numero_tlf.config(bg="lightcoral")
     else:
         entrada_numero_tlf.config(bg="white")
         if datos_Registro is not None:  
             entrada_numero_tlf.insert(0, datos_Registro["numero_tlf"])
 
-    etiqueta_fecha_nacimiento = Label(ventana, text="Fecha de Nacimiento*:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_fecha_nacimiento.grid(row=8, column=0, padx=10, pady=10)
-    entrada_fecha_nacimiento = Entry(ventana, font=("Arial", 14))
-    entrada_fecha_nacimiento.grid(row=8, column=1, padx=10, pady=10)
-    etiqueta_error_fecha_nacimiento = Label(ventana, text="", font=("Arial", 12), bg="#E6E6E6", fg="red")
+    etiqueta_fecha_nacimiento = Label(frame, text="Fecha de Nacimiento*:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_fecha_nacimiento.grid(row=7, column=0, padx=10, pady=5, sticky="n")
+    entrada_fecha_nacimiento = Entry(frame, font=("Arial", 14), width=20)
+    entrada_fecha_nacimiento.grid(row=7, column=1, padx=10, pady=5, sticky="n")
+    etiqueta_error_fecha_nacimiento = Label(frame, text="", font=("Arial", 12), bg="#E6E6E6", fg="red")
     if condicion_fecha == False:
-        etiqueta_error_fecha_nacimiento = Label(ventana, text="Fecha inválida el formato debe ser: yyyy-mm-dd", font=("Arial", 12), bg="#E6E6E6", fg="red")
-        etiqueta_error_fecha_nacimiento.grid(row=8, column=2, padx=10, pady=10, sticky="w")
+        etiqueta_error_fecha_nacimiento = Label(frame, text="Fecha inválida el formato debe ser: yyyy-mm-dd", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_fecha_nacimiento.grid(row=7, column=2, padx=10, pady=5, sticky="w")
         entrada_fecha_nacimiento.config(bg="lightcoral")
     else:
         entrada_fecha_nacimiento.config(bg="white")
         if datos_Registro is not None:
             entrada_fecha_nacimiento.insert(0, datos_Registro["fecha_nacimiento"])
 
-    etiqueta_correo = Label(ventana, text="Correo Electrónico*:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_correo.grid(row=9, column=0, padx=10, pady=10)
-    entrada_correo = Entry(ventana, font=("Arial", 14))
-    entrada_correo.grid(row=9, column=1, padx=10, pady=10)
+    etiqueta_correo = Label(frame, text="Correo Electrónico*:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_correo.grid(row=8, column=0, padx=10, pady=5, sticky="n")
+    entrada_correo = Entry(frame, font=("Arial", 14), width=20)
+    entrada_correo.grid(row=8, column=1, padx=10, pady=5, sticky="n")
     if condicion_mail == False:
-        etiqueta_error_correo = Label(ventana, text="Correo inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
-        etiqueta_error_correo.grid(row=9, column=2, padx=10, pady=10, sticky="w")
+        etiqueta_error_correo = Label(frame, text="Correo inválido", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_correo.grid(row=8, column=2, padx=10, pady=5, sticky="w")
+        entrada_correo.config(bg="lightcoral")
+    elif unicidad_mail:
+        etiqueta_error_correo = Label(frame, text="El correo introducido ya existe", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_correo.grid(row=8, column=2, padx=10, pady=5, sticky="w")
         entrada_correo.config(bg="lightcoral")
     else:
         entrada_correo.config(bg="white")
         if datos_Registro is not None:
             entrada_correo.insert(0, datos_Registro["correo"])
 
-    etiqueta_contrasena = Label(ventana, text="Contraseña*:", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_contrasena.grid(row=10, column=0, padx=10, pady=10)
-    entrada_contrasena = Entry(ventana, show="*", font=("Arial", 14))
-    entrada_contrasena.grid(row=10, column=1, padx=10, pady=10)
+    etiqueta_contrasena = Label(frame, text="Contraseña*:", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_contrasena.grid(row=9, column=0, padx=10, pady=5, sticky="n")
+    entrada_contrasena = Entry(frame, show="*", font=("Arial", 14), width=20)
+    entrada_contrasena.grid(row=9, column=1, padx=10, pady=5, sticky="n")
     if condicion_contrasena == False:
-        etiqueta_error_contrasena = Label(ventana, text="Contraseña inválida: Debe contener entre 8 y 16 caracteres,\n al menos una letra mayúscula, una letra minúscula y un dígito. ", font=("Arial", 12), bg="#E6E6E6", fg="red")
-        etiqueta_error_contrasena.grid(row=10, column=2, padx=10, pady=10, sticky="w")
+        etiqueta_error_contrasena = Label(frame, text="Contraseña inválida: Debe contener entre 8 y 16 caracteres,\n al menos una letra mayúscula, una letra minúscula y un dígito. ", font=("Arial", 12), bg="#E6E6E6", fg="red")
+        etiqueta_error_contrasena.grid(row=9, column=2, padx=10, pady=5, sticky="w")
         entrada_contrasena.config(bg="lightcoral")
     else:
         entrada_contrasena.config(bg="white")
 
     # Botón para registrarse
-    boton_registro = Button(ventana, text="Registrarse", font=("Arial", 14),
+    boton_registro = Button(frame, text="Registrarse", font=("Arial", 14),
                             command=lambda: registrar(entrada_nombre.get(), entrada_apellido1.get(), entrada_apellido2.get(), entrada_dni.get(), entrada_numero_tarjeta.get(), entrada_numero_tlf.get(), entrada_correo.get(), entrada_fecha_nacimiento.get(), entrada_contrasena.get()),
                             bg="lightblue")
-    boton_registro.grid(row=11, column=0, columnspan=2, padx=10, pady=10)
+    boton_registro.grid(row=10, column=0, columnspan=3, padx=10, pady=15, sticky="n")
 
     # Etiqueta "¿Ya tienes cuenta?"
-    etiqueta_registro = Label(ventana, text="¿Ya tienes cuenta?", font=("Arial", 14), bg="#E6E6E6")
-    etiqueta_registro.grid(row=12, column=0, columnspan=2, padx=10, pady=10)
+    etiqueta_registro = Label(frame, text="¿Ya tienes cuenta?", font=("Arial", 14), bg="#E6E6E6")
+    etiqueta_registro.grid(row=11, column=0, columnspan=3, padx=10, pady=5, sticky="n")
 
     # Botón de login (debajo de la etiqueta)
-    boton_regresar = Button(ventana, text="Login", font=("Arial", 14),
+    boton_regresar = Button(frame, text="Login", font=("Arial", 14),
                             command=lambda: actualizar_ventana(mostrar_login),
                             bg="lightblue")
-    boton_regresar.grid(row=13, column=0, columnspan=2, padx=10, pady=10)
+    boton_regresar.grid(row=12, column=0, columnspan=3, padx=10, pady=10, sticky="n")
+
+def comprobar_correo_bd(correo):
+    """
+    Comprueba si el correo electrónico ya existe en la base de datos.
+
+    Args:
+        correo (str): Correo electrónico a comprobar.
+
+    Returns:
+        bool: True si el correo ya existe, False en caso contrario.
+    """
+    resultados = traer_correos_bd()
+    if resultados != False:
+        for resultado in resultados:
+            if resultado == correo:
+                return True
+    return False
+
+def comprobar_dni_bd(dni):
+    """
+    Comprueba si el DNI ya existe en la base de datos.
+
+    Args:
+        dni (str): DNI a comprobar.
+
+    Returns:
+        bool: True si el DNI ya existe, False en caso contrario.
+    """
+    resultados = traer_dni_bd()
+    if resultados != False:
+        for resultado in resultados:
+            if resultado    == dni:
+                return True
+    return False
 
 def comprobar_correo(correo):
     """
@@ -287,7 +362,7 @@ def comprobar_correo(correo):
     Returns:
         bool: True si el correo es válido, False en caso contrario.
     """
-    patron = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    patron = r'^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
     if re.match(patron, correo):
         return True
     else:
@@ -439,14 +514,16 @@ def registrar(nombre, apellido1, apellido2, dni, numero_tarjeta, numero_tlf, cor
     }
     condicion_fecha = comprobar_fecha(fecha_nacimiento)
     condicion_mail = comprobar_correo(correo)
+    unicidad_mail = comprobar_correo_bd(correo)
     condicion_contrasena = comprobar_contrasena(contrasena)
     condicion_DNI = comprobar_dni(dni)
+    unicidad_dni = comprobar_dni_bd(dni)
     condicion_tlf = comprobar_numero_tlf(numero_tlf)
     condicion_numero_tarjeta = comprobar_numero_tarjeta(numero_tarjeta)
     condicion_nombre = comprobar_cadena(nombre)
     condicion_apellido1 = comprobar_cadena(apellido1)
     condicion_apellido2 = comprobar_cadena(apellido2)
-    if condicion_nombre and condicion_apellido1 and (condicion_apellido2 or apellido2 == "") and condicion_DNI and condicion_contrasena and condicion_fecha and condicion_tlf and condicion_mail:
+    if condicion_nombre and condicion_apellido1 and (condicion_apellido2 or apellido2 == "") and condicion_DNI and unicidad_dni == False and condicion_contrasena and condicion_fecha and condicion_tlf and condicion_mail and unicidad_mail == False and condicion_numero_tarjeta: 
         cliente = Cliente(None,nombre, apellido1, apellido2, dni, numero_tarjeta, numero_tlf, correo, fecha_nacimiento, contrasena)
         insertar_cliente_bd(cliente)
         Messagebox.showinfo("Registro exitoso", "Usuario registrado correctamente.")
@@ -454,7 +531,7 @@ def registrar(nombre, apellido1, apellido2, dni, numero_tarjeta, numero_tlf, cor
         datos_Registro = None
     else:
         Messagebox.showerror("Error", "Por favor comprueba los campos en rojo.")
-        actualizar_ventana(lambda:mostrar_registro_usuario(condicion_fecha, condicion_mail, condicion_contrasena, condicion_DNI, condicion_tlf, condicion_numero_tarjeta, condicion_nombre, condicion_apellido1, condicion_apellido2))
+        actualizar_ventana(lambda:mostrar_registro_usuario(condicion_fecha, condicion_mail, condicion_contrasena, condicion_DNI, condicion_tlf, condicion_numero_tarjeta, condicion_nombre, condicion_apellido1, condicion_apellido2,unicidad_dni,unicidad_mail))
 
 def cerrar_programa():
     """
@@ -483,7 +560,7 @@ def mostrar_productos(pagina_actual, carrito, cliente):
     Muestra los productos disponibles en la página actual y agrega botones de navegación.
     """
     # Cargar la imagen para el botón de la cesta
-    imagen_cesta = Image.open(r"C:\proyecto\imagen\carro.png")  # Ruta de la imagen
+    imagen_cesta = Image.open(r"C:\Users\carlo\Desktop\python\Proyecto-Esail-Python\images\carro.png")  # Ruta de la imagen
     imagen_cesta = imagen_cesta.resize((150, 150), Image.Resampling.LANCZOS)  # Redimensionar la imagen
     imagen_cesta_tk = ImageTk.PhotoImage(imagen_cesta)
 
@@ -726,7 +803,13 @@ def mostrar_cesta_compra(cesta_compra, cliente, pagina_actual=1, productos_por_p
         etiqueta_precio_total.grid(row=0, column=2, padx=10)
         
     else:   
-        mostrar_cesta_vacia(ventana)
+        Label(
+            ventana,
+            text="La cesta de compra está vacía.",
+            font=("Arial", 16),
+            bg="#E6E6E6"
+        ).grid(row=1, column=0, columnspan=3, pady=20, sticky="n")
+
 
     boton_regresar = Button(frame_botones, text="Regresar al Menú Principal", font=("Arial", 14), bg="lightblue",
                             command=lambda: boton_regresar_a_menu_cliente(cesta_compra, cliente))
@@ -739,21 +822,12 @@ def limpiar_ventana(ventana):
     """
     for widget in ventana.winfo_children():
         widget.destroy()
-
-    # Restablecer las configuraciones del grid
-    for i in range(ventana.grid_size()[1]):  # Número de columnas
-        ventana.grid_columnconfigure(i, weight=0)
-    for i in range(ventana.grid_size()[0]):  # Número de filas
-        ventana.grid_rowconfigure(i, weight=0)
+    ventana.geometry("1600x900")  # Restablecer el tamaño de la ventana
 
 # Función para mostrar el título
 def mostrar_titulo(ventana, texto="Cesta de Compra"):
     titulo = Label(ventana, text=texto, font=("Arial", 24), bg="#E6E6E6")
-    titulo.grid(row=0, column=0, columnspan=2, pady=20)
-
-# Función para mostrar un mensaje cuando la cesta está vacía
-def mostrar_cesta_vacia(ventana):
-    Label(ventana, text="La cesta de compra está vacía.", font=("Arial", 16), bg="#E6E6E6").grid(row=1, column=0, columnspan=2, pady=20)
+    titulo.grid(row=0, column=0, columnspan=3, pady=20, sticky="n")
 
 # Función para mostrar un producto en la interfaz
 def mostrar_producto_en_carrito(ventana, producto, cantidad, indice, cesta_compra, cliente):
@@ -903,10 +977,6 @@ def mostrar_boton_comprar(ventana, cesta_compra, cliente):
 def mostrar_tickets(carrito, cliente, pagina_actual=1, tickets_por_pagina=10):
     """
     Muestra los tickets de un cliente en la interfaz gráfica, agrupando los productos por fecha.
-
-    Args:
-        carrito (list): Carrito actual del cliente.
-        cliente (Cliente): El cliente cuyos tickets se van a mostrar.
     """
     limpiar_ventana(ventana)
 
@@ -914,7 +984,7 @@ def mostrar_tickets(carrito, cliente, pagina_actual=1, tickets_por_pagina=10):
     tickets_cliente = obtener_tickets_cliente(cliente)  # Devuelve una lista de productos con sus fechas
 
     etiqueta_tickets = Label(ventana, text="Tickets de Compra", font=("Arial", 20), bg="#E6E6E6")
-    etiqueta_tickets.grid(row=0, column=0, columnspan=5, pady=10)
+    etiqueta_tickets.grid(row=0, column=0, columnspan=5, pady=10, sticky="n")
 
     # Agrupar los tickets por fecha
     tickets_cliente_por_fecha = {}
@@ -938,24 +1008,29 @@ def mostrar_tickets(carrito, cliente, pagina_actual=1, tickets_por_pagina=10):
         for fecha, tickets in tickets_pagina:
             # Crear un frame para el ticket
             frame_ticket = Frame(ventana, bg="white", relief=SOLID, borderwidth=1)
-            frame_ticket.grid(row=row, column=0, columnspan=5, padx=20, pady=10, sticky="ew")
+            frame_ticket.grid(row=row, column=0, columnspan=5, padx=20, pady=10, sticky="n")
             row += 1
 
             # Información del ticket
             etiqueta_ticket = Label(frame_ticket, text=f"Ticket del: {fecha}", font=("Arial", 14), bg="white")
-            etiqueta_ticket.grid(row=0, column=0, padx=10, pady=5)
+            etiqueta_ticket.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
             # Botón para ver los detalles del ticket
             boton_detalles = Button(frame_ticket, text="Ver Detalles", font=("Arial", 12), bg="lightblue",
                                     command=lambda t=tickets: mostrar_detalles_ticket(t))
-            boton_detalles.grid(row=0, column=1, padx=10, pady=5)
+            boton_detalles.grid(row=0, column=1, padx=10, pady=5, sticky="e")
     else:
-        etiqueta_no_tickets = Label(ventana, text="No se encontraron tickets para este cliente.", font=("Arial", 14), bg="#E6E6E6")
-        etiqueta_no_tickets.grid(row=1, column=0, columnspan=5, pady=20)
+        etiqueta_no_tickets = Label(
+            ventana,
+            text="No se encontraron tickets para este cliente.",
+            font=("Arial", 14),
+            bg="#E6E6E6"
+        )
+        etiqueta_no_tickets.grid(row=1, column=0, columnspan=5, pady=20, sticky="n")
 
     # Botones de navegación
     frame_navegacion = Frame(ventana, bg="#E6E6E6")
-    frame_navegacion.grid(row=row, column=0, columnspan=5, pady=20)
+    frame_navegacion.grid(row=row, column=0, columnspan=5, pady=20, sticky="n")
 
     if pagina_actual > 1:
         boton_anterior = Button(frame_navegacion, text="Página Anterior", font=("Arial", 14), bg="lightblue",
@@ -968,8 +1043,13 @@ def mostrar_tickets(carrito, cliente, pagina_actual=1, tickets_por_pagina=10):
         boton_siguiente.grid(row=0, column=1, padx=10)
 
     # Botón para regresar al menú principal
-    Button(ventana, text="Regresar al Menú Principal", font=("Arial", 14), bg="lightblue",
-           command=lambda: boton_regresar_a_menu_cliente(carrito, cliente)).grid(row=row + 1, column=0, columnspan=5, pady=20)
+    Button(
+        ventana,
+        text="Regresar al Menú Principal",
+        font=("Arial", 14),
+        bg="lightblue",
+        command=lambda: boton_regresar_a_menu_cliente(carrito, cliente)
+    ).grid(row=row + 1, column=0, columnspan=5, pady=20, sticky="n")
 
 def mostrar_detalles_ticket(tickets):
     """
@@ -1003,28 +1083,29 @@ def mostrar_detalles_ticket(tickets):
 
     # Crear un frame dentro del canvas para contener los widgets
     frame_contenido = Frame(canvas, bg="#E6E6E6")
-    canvas.create_window((0, 0), window=frame_contenido, anchor="nw")
+    canvas.create_window((0, 0), window=frame_contenido, anchor="n")
 
     # Mostrar los detalles del ticket
     etiqueta_detalles = Label(frame_contenido, text="Detalles del Ticket", font=("Arial", 20), bg="#E6E6E6")
     etiqueta_detalles.pack(pady=10)
 
     for ticket in tickets:
-        # Crear un frame para el producto
-        frame_producto = Frame(frame_contenido, bg="white", relief=SOLID, borderwidth=1)
-        frame_producto.pack(padx=20, pady=10, fill=X)
+        # Crear un frame para el producto con tamaño fijo
+        frame_producto = Frame(frame_contenido, bg="white", relief=SOLID, borderwidth=1, width=400, height=175)
+        frame_producto.pack(padx=20, pady=10)
+        frame_producto.pack_propagate(False)  # Evitar que el frame cambie de tamaño según su contenido
 
         # Información del producto
-        etiqueta_nombre = Label(frame_producto, text=f"Nombre: {ticket['nombre_producto']}", font=("Arial", 14), bg="white")
+        etiqueta_nombre = Label(frame_producto, text=f"Nombre: {ticket['nombre_producto']}", font=("Arial", 14), bg="white", wraplength=380, justify="left")
         etiqueta_nombre.pack(pady=5)
 
-        etiqueta_precio = Label(frame_producto, text=f"Precio: ${ticket['precio']:.2f}", font=("Arial", 14), bg="white")
+        etiqueta_precio = Label(frame_producto, text=f"Precio: ${ticket['precio']:.2f}", font=("Arial", 14), bg="white", wraplength=380, justify="left")
         etiqueta_precio.pack(pady=5)
 
-        etiqueta_cantidad = Label(frame_producto, text=f"Cantidad: {ticket['cantidad']}", font=("Arial", 14), bg="white")
+        etiqueta_cantidad = Label(frame_producto, text=f"Cantidad: {ticket['cantidad']}", font=("Arial", 14), bg="white", wraplength=380, justify="left")
         etiqueta_cantidad.pack(pady=5)
 
-        etiqueta_precio_total = Label(frame_producto, text=f"Precio Total: ${ticket['precio'] * ticket['cantidad']:.2f}", font=("Arial", 14), bg="white")
+        etiqueta_precio_total = Label(frame_producto, text=f"Precio Total: ${ticket['precio'] * ticket['cantidad']:.2f}", font=("Arial", 14), bg="white", wraplength=380, justify="left")
         etiqueta_precio_total.pack(pady=5)
 
     # Botón para cerrar la ventana de detalles
